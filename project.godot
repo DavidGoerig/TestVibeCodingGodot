@@ -11,4 +11,4 @@ run/main_scene="res://scenes/Main.tscn"
 RosterDataService="*res://autoloads/RosterDataService.gd"
 
 [rendering]
-renderer/rendering_method="mobile"
+renderer/rendering_method="forward_plus"
