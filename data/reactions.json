@@ -1,0 +1,86 @@
+[
+  {
+    "a": "fire",
+    "b": "grass",
+    "result": "burning_forest",
+    "effect": "ignition_spread",
+    "description": "La végétation brûle rapidement et propage la chaleur."
+  },
+  {
+    "a": "fire",
+    "b": "water",
+    "result": "steam",
+    "effect": "steam_cloud",
+    "description": "L'eau vaporise et crée une zone de gêne visuelle et de pression."
+  },
+  {
+    "a": "water",
+    "b": "electric",
+    "result": "conductive_zone",
+    "effect": "chain_current",
+    "description": "L'eau rend la zone conductrice et propage le courant."
+  },
+  {
+    "a": "water",
+    "b": "ice",
+    "result": "frozen_surface",
+    "effect": "freeze_glaze",
+    "description": "L'eau gèle et forme une surface rigide ou glissante."
+  },
+  {
+    "a": "fire",
+    "b": "ice",
+    "result": "water",
+    "effect": "melt_ice_to_water",
+    "description": "Le feu fait fondre le gel et transforme la zone en flaque d'eau."
+  },
+  {
+    "a": "ice",
+    "b": "fire",
+    "result": "water",
+    "effect": "melt_ice_to_water",
+    "description": "Le feu fait fondre le gel et transforme la zone en flaque d'eau."
+  },
+  {
+    "a": "ground",
+    "b": "fire",
+    "result": "magma",
+    "effect": "lava_zone",
+    "description": "Le sol chauffé transforme la roche en terrain dangereux."
+  },
+  {
+    "a": "poison",
+    "b": "fire",
+    "result": "toxic_explosion",
+    "effect": "acid_burst",
+    "description": "Le poison surchauffe et explose dans une zone contaminée."
+  },
+  {
+    "a": "shadow",
+    "b": "fire",
+    "result": "smoke_blindness",
+    "effect": "smoke_screen",
+    "description": "L'ombre et le feu créent un écran visuel et une zone difficile à lire."
+  },
+  {
+    "a": "shadow",
+    "b": "poison",
+    "result": "corrupt_cloud",
+    "effect": "toxicity_in_darkness",
+    "description": "L'ombre cache une contamination toxique et la rend difficile à anticiper."
+  },
+  {
+    "a": "metal",
+    "b": "electric",
+    "result": "magnetic_current",
+    "effect": "current_over_metal",
+    "description": "Le métal canalise et renforce la décharge électrique."
+  },
+  {
+    "a": "psychic",
+    "b": "flying",
+    "result": "air_teleport",
+    "effect": "distorted_air",
+    "description": "Le vent et la distorsion mentale créent des axes de déplacement très imprévisibles."
+  }
+]

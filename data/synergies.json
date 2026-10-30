@@ -1,0 +1,44 @@
+[
+  {
+    "id": "fire_water",
+    "label": "Vapeur",
+    "description": "Le feu vaporise l'eau et crée une zone de pression visuelle et de contrôle.",
+    "best_for": ["controller", "zone_setter", "assassin"]
+  },
+  {
+    "id": "water_electric",
+    "label": "Réseau conductif",
+    "description": "L'eau transforme le terrain en route conductrice et permet des chaines électriques.",
+    "best_for": ["controller", "artillery", "assassin"]
+  },
+  {
+    "id": "ground_ice",
+    "label": "Plateforme gelée",
+    "description": "Le sol est durci, surélevé ou recouvert de glace pour créer des axes et des barrages.",
+    "best_for": ["tank", "support", "dps" ]
+  },
+  {
+    "id": "shadow_poison",
+    "label": "Nuage noir",
+    "description": "L'ombre cache des toxines et rend une zone presque impossible à lire.",
+    "best_for": ["assassin", "controller", "trapper"]
+  },
+  {
+    "id": "psychic_flying",
+    "label": "Déplacement altéré",
+    "description": "Le déplacement mental couplé au vent désorganise entièrement la géométrie de combat.",
+    "best_for": ["repositioner", "controller", "mobile_dps"]
+  },
+  {
+    "id": "metal_fire",
+    "label": "Masse ardente",
+    "description": "Le métal renforcé par le feu devient une fortification offensive et destructrice.",
+    "best_for": ["tank", "breaker", "fortifier"]
+  },
+  {
+    "id": "grass_poison",
+    "label": "Forêt toxique",
+    "description": "La végétation devient un piège vivants et une zone de contamination.",
+    "best_for": ["support", "trapper", "controller"]
+  }
+]

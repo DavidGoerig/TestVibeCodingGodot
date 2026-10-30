@@ -1,0 +1,4269 @@
+{
+  "schema_version": 1,
+  "template_name": "skill_archetypes",
+  "purpose": "Base schema for generating champion skills. Each archetype encodes a family of mechanical patterns, targeting rules, terrain effects, animation flow, and status interactions that can be reused across all champions.",
+  "core_fields": {
+    "id": "string",
+    "name": "string",
+    "category": "string",
+    "subtype": "string",
+    "family": "string",
+    "targeting": "object",
+    "shape": "object",
+    "cost": "object",
+    "effects": "array",
+    "status_effects": "array",
+    "terrain_behavior": "object",
+    "animation": "object",
+    "validation": "object",
+    "tags": "array"
+  },
+  "families": [
+    "damage",
+    "heal",
+    "shield",
+    "mobility",
+    "control",
+    "terrain",
+    "stealth",
+    "support",
+    "summon",
+    "bomb",
+    "portal",
+    "revive",
+    "object",
+    "utility",
+    "reaction",
+    "ultimate",
+    "rule",
+    "status"
+  ],
+  "targeting_modes": [
+    "self",
+    "ally",
+    "enemy",
+    "allies",
+    "enemies",
+    "all_units",
+    "all_enemies",
+    "all_allies",
+    "tile",
+    "tile_area",
+    "line",
+    "cone",
+    "burst",
+    "wall_segment",
+    "portal_pair",
+    "object",
+    "custom_mask",
+    "global",
+    "ally_or_enemy"
+  ],
+  "archetypes": [
+    {
+      "id": "single_target_damage",
+      "name": "Mono-cible dégâts",
+      "category": "attack",
+      "subtype": "single_target",
+      "family": "damage",
+      "targeting": {
+        "mode": "enemy",
+        "range": {"min": 1, "max": 3},
+        "requires_line_of_sight": true,
+        "can_target_units": true,
+        "can_target_tiles": false
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1,
+        "offset": {"x": 0, "y": 0}
+      },
+      "cost": {
+        "pa": 2,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "damage",
+          "damage_type": "physical_or_elemental",
+          "scaling": "dmg_phys_or_dmg_elem",
+          "base": 25,
+          "formula": "base + scaling * 0.8"
+        }
+      ],
+      "status_effects": [],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "windup",
+        "cast": "forward_strike",
+        "impact": "single_hit_burst",
+        "post_cast": "recover",
+        "priority": 2,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_define_target": true,
+        "must_define_damage": true,
+        "must_define_range": true
+      },
+      "tags": ["burst", "damage", "single_target", "basic_attack"]
+    },
+    {
+      "id": "line_damage",
+      "name": "Dégâts en ligne",
+      "category": "attack",
+      "subtype": "line",
+      "family": "damage",
+      "targeting": {
+        "mode": "line",
+        "range": {"min": 1, "max": 5},
+        "width": 1,
+        "length": 5,
+        "requires_line_of_sight": true
+      },
+      "shape": {
+        "type": "line",
+        "length": 5,
+        "width": 1,
+        "cells": [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 3,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "damage",
+          "damage_type": "physical_or_elemental",
+          "base": 30,
+          "scaling": "dmg_phys_or_dmg_elem",
+          "formula": "base + scaling * 0.75"
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "slow",
+          "value": 25,
+          "duration": 1
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "prepare_arc",
+        "cast": "sweep",
+        "impact": "line_hit",
+        "post_cast": "reset",
+        "priority": 2,
+        "sync_with_hit": false
+      },
+      "validation": {
+        "must_define_shape": true,
+        "must_define_width": true,
+        "must_define_target_line": true
+      },
+      "tags": ["line", "damage", "pressure", "lane_control"]
+    },
+    {
+      "id": "cone_damage",
+      "name": "Cône dégâts",
+      "category": "attack",
+      "subtype": "cone",
+      "family": "damage",
+      "targeting": {
+        "mode": "cone",
+        "range": {"min": 1, "max": 3},
+        "angle": 60,
+        "width": 2,
+        "length": 4
+      },
+      "shape": {
+        "type": "cone",
+        "cells": [[0, 0], [1, 0], [2, 0], [2, -1], [2, 1], [1, -1], [1, 1]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 3,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "damage",
+          "damage_type": "elemental",
+          "base": 35,
+          "scaling": "dmg_elem",
+          "formula": "base + scaling * 0.8"
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "push",
+          "value": 1,
+          "duration": 0
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "gather_energy",
+        "cast": "arc_wave",
+        "impact": "cone_expansion",
+        "post_cast": "settle",
+        "priority": 3,
+        "sync_with_hit": false
+      },
+      "validation": {
+        "must_define_angle": true,
+        "must_define_cone_shape": true
+      },
+      "tags": ["damage", "cone", "push", "area"]
+    },
+    {
+      "id": "burst_damage",
+      "name": "Zone burst dégâts",
+      "category": "attack",
+      "subtype": "burst",
+      "family": "damage",
+      "targeting": {
+        "mode": "burst",
+        "range": {"min": 1, "max": 3},
+        "radius": 2,
+        "target": "tile_area"
+      },
+      "shape": {
+        "type": "burst",
+        "radius": 2,
+        "cells": [[0, 0], [-1, 0], [1, 0], [0, -1], [0, 1], [-1, -1], [-1, 1], [1, -1], [1, 1]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 3,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "damage",
+          "damage_type": "elemental",
+          "base": 30,
+          "scaling": "dmg_elem",
+          "formula": "base + scaling * 0.7"
+        }
+      ],
+      "status_effects": [],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "charge_target",
+        "cast": "circle_pulse",
+        "impact": "burst_flash",
+        "post_cast": "recover",
+        "priority": 3,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_define_radius": true,
+        "must_define_area_target": true
+      },
+      "tags": ["burst", "damage", "aoe"]
+    },
+    {
+      "id": "heal_self_or_ally",
+      "name": "Soin",
+      "category": "support",
+      "subtype": "heal",
+      "family": "heal",
+      "targeting": {
+        "mode": "ally",
+        "range": {"min": 0, "max": 3},
+        "can_target_self": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 2,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "heal",
+          "base": 30,
+          "scaling": "dmg_elem_or_support",
+          "formula": "base + scaling * 0.6"
+        }
+      ],
+      "status_effects": [],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "channeling",
+        "cast": "ribbon_of_light",
+        "impact": "heal_bloom",
+        "post_cast": "stabilize",
+        "priority": 1,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_define_heal_amount": true,
+        "must_define_target_type": true
+      },
+      "tags": ["heal", "support", "ally"]
+    },
+    {
+      "id": "shield_self_or_ally",
+      "name": "Bouclier",
+      "category": "support",
+      "subtype": "shield",
+      "family": "shield",
+      "targeting": {
+        "mode": "ally",
+        "range": {"min": 0, "max": 3},
+        "can_target_self": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 2,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "shield",
+          "base": 40,
+          "scaling": "support_value",
+          "duration": 2
+        }
+      ],
+      "status_effects": [],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "raise_guard",
+        "cast": "shield_rise",
+        "impact": "bubble_glow",
+        "post_cast": "hold",
+        "priority": 1,
+        "sync_with_hit": false
+      },
+      "validation": {
+        "must_define_shield_value": true,
+        "must_define_duration": true
+      },
+      "tags": ["shield", "defense", "ally"]
+    },
+    {
+      "id": "dash_mobility",
+      "name": "Dash / déplacement",
+      "category": "mobility",
+      "subtype": "dash",
+      "family": "mobility",
+      "targeting": {
+        "mode": "tile",
+        "range": {"min": 1, "max": 4},
+        "can_target_self": true,
+        "can_target_tile": true
+      },
+      "shape": {
+        "type": "line",
+        "length": 4,
+        "width": 1,
+        "cells": [[0, 0], [1, 0], [2, 0], [3, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 2,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "move",
+          "target": "self_or_tile",
+          "distance": 3,
+          "ignore_obstacles": false,
+          "can_pass_through_units": false
+        }
+      ],
+      "status_effects": [],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "stance_bend",
+        "cast": "dash_forward",
+        "impact": "dust_trail",
+        "post_cast": "land",
+        "priority": 2,
+        "sync_with_hit": false
+      },
+      "validation": {
+        "must_define_distance": true,
+        "must_define_movement_behavior": true
+      },
+      "tags": ["mobility", "dash", "positioning"]
+    },
+    {
+      "id": "teleport_blink",
+      "name": "Téléport / blink",
+      "category": "mobility",
+      "subtype": "teleport",
+      "family": "mobility",
+      "targeting": {
+        "mode": "tile",
+        "range": {"min": 1, "max": 5},
+        "can_target_tile": true,
+        "can_target_self": false
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 3,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "teleport",
+          "distance": 4,
+          "target": "tile",
+          "ignore_obstacles": true,
+          "can_pass_through_units": true
+        }
+      ],
+      "status_effects": [],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "focus",
+        "cast": "blink disappear",
+        "impact": "blink_reappear",
+        "post_cast": "stabilize",
+        "priority": 3,
+        "sync_with_hit": false
+      },
+      "validation": {
+        "must_define_target_tile": true,
+        "must_define_blink_behavior": true
+      },
+      "tags": ["mobility", "teleport", "bypass"]
+    },
+    {
+      "id": "zone_control_block_teleport",
+      "name": "Zone anti-TP / anti-dash",
+      "category": "terrain",
+      "subtype": "anti_mobility_zone",
+      "family": "terrain",
+      "targeting": {
+        "mode": "tile_area",
+        "range": {"min": 1, "max": 4},
+        "radius": 2,
+        "target": "tile_area"
+      },
+      "shape": {
+        "type": "circle",
+        "radius": 2,
+        "cells": [[0, 0], [1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 3,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "terrain_zone",
+          "effect_type": "anti_teleport",
+          "effect_type_secondary": "anti_dash",
+          "duration": 2
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "root",
+          "value": 1,
+          "duration": 1
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": true,
+        "creates_object": true,
+        "object_type": "zone",
+        "triggers_reaction": true
+      },
+      "animation": {
+        "pre_cast": "mark_area",
+        "cast": "seal_zone",
+        "impact": "rune_activation",
+        "post_cast": "hold",
+        "priority": 3,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_define_zone_effect": true,
+        "must_define_anti_mobility_behavior": true
+      },
+      "tags": ["terrain", "mobility_lock", "anti_teleport", "anti_dash"]
+    },
+    {
+      "id": "stealth_bush_camouflage",
+      "name": "Camouflage dans les buissons",
+      "category": "stealth",
+      "subtype": "camouflage",
+      "family": "stealth",
+      "targeting": {
+        "mode": "self",
+        "range": {"min": 0, "max": 0},
+        "can_target_self": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 2,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "status",
+          "status": "invisible",
+          "duration": 2,
+          "requires_terrain": "bush_or_cover"
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "invisible",
+          "duration": 2
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "blend_into_cover",
+        "cast": "fade_shadow",
+        "impact": "leaf_sheen",
+        "post_cast": "hold_form",
+        "priority": 1,
+        "sync_with_hit": false
+      },
+      "validation": {
+        "must_define_stealth_condition": true,
+        "must_define_cover_requirement": true
+      },
+      "tags": ["stealth", "bush", "invisibility", "ambush"]
+    },
+    {
+      "id": "poison_dot",
+      "name": "Poison / DoT",
+      "category": "attack",
+      "subtype": "dot",
+      "family": "damage",
+      "targeting": {
+        "mode": "enemy",
+        "range": {"min": 1, "max": 3},
+        "can_target_units": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 2,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "damage",
+          "damage_type": "poison",
+          "base": 12,
+          "scaling": "dmg_elem",
+          "duration": 2,
+          "tick_rate": 1
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "poison",
+          "value": 12,
+          "duration": 2,
+          "tick_rate": 1
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "ample_venom",
+        "cast": "spit_toxin",
+        "impact": "poison_cloud",
+        "post_cast": "stagger",
+        "priority": 2,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_define_poison_duration": true,
+        "must_define_tick_behavior": true
+      },
+      "tags": ["poison", "dot", "damage_over_time"]
+    },
+    {
+      "id": "bomb_explosive",
+      "name": "Bombe explosive",
+      "category": "object",
+      "subtype": "bomb",
+      "family": "bomb",
+      "targeting": {
+        "mode": "tile",
+        "range": {"min": 1, "max": 4},
+        "can_target_tile": true,
+        "can_target_object": true
+      },
+      "shape": {
+        "type": "circle",
+        "radius": 2,
+        "cells": [[0, 0], [1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 3,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "explosion",
+          "damage_type": "physical_or_elemental",
+          "base": 40,
+          "radius": 2,
+          "trigger": "on_timer_end_or_on_contact"
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "push",
+          "value": 1,
+          "duration": 0
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": true,
+        "object_type": "bomb",
+        "triggers_reaction": true
+      },
+      "animation": {
+        "pre_cast": "arm_bomb",
+        "cast": "throw_object",
+        "impact": "explosion_flash",
+        "post_cast": "smoke_cloud",
+        "priority": 3,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_define_explosion_radius": true,
+        "must_define_timer_or_contact_trigger": true
+      },
+      "tags": ["bomb", "explosive", "object", "area"]
+    },
+    {
+      "id": "portal_pair",
+      "name": "Portail / téléportation",
+      "category": "utility",
+      "subtype": "portal",
+      "family": "portal",
+      "targeting": {
+        "mode": "portal_pair",
+        "range": {"min": 1, "max": 5},
+        "can_target_tile": true,
+        "can_target_self": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 3,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "portal",
+          "pair": true,
+          "exit_tile": "linked_tile",
+          "duration": 3,
+          "can_pass_through": true
+        }
+      ],
+      "status_effects": [],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": true,
+        "object_type": "portal",
+        "triggers_reaction": true
+      },
+      "animation": {
+        "pre_cast": "gate_draw",
+        "cast": "portal_ripple",
+        "impact": "portal_stabilize",
+        "post_cast": "hold_gate",
+        "priority": 3,
+        "sync_with_hit": false
+      },
+      "validation": {
+        "must_define_portal_pair": true,
+        "must_define_exit_logic": true
+      },
+      "tags": ["portal", "teleport", "utility", "map_control"]
+    },
+    {
+      "id": "revive_ally",
+      "name": "Résurrection",
+      "category": "support",
+      "subtype": "revive",
+      "family": "revive",
+      "targeting": {
+        "mode": "ally",
+        "range": {"min": 1, "max": 3},
+        "can_target_dead_allies": true,
+        "can_target_self": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 4,
+        "pm": 0,
+        "focus": 1,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "revive",
+          "base": 25,
+          "value": "percent_of_max_pv",
+          "duration": 1
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "shield",
+          "value": 30,
+          "duration": 2
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "prayer_pose",
+        "cast": "light_rise",
+        "impact": "life_rebound",
+        "post_cast": "watchful_stillness",
+        "priority": 4,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_define_target_dead_ally": true,
+        "must_define_revive_value": true
+      },
+      "tags": ["revive", "support", "healing", "save"]
+    },
+    {
+      "id": "carry_and_throw",
+      "name": "Porter / jeter",
+      "category": "utility",
+      "subtype": "carry",
+      "family": "object",
+      "targeting": {
+        "mode": "ally_or_enemy",
+        "range": {"min": 1, "max": 2},
+        "can_target_units": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 3,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "carry",
+          "target": "unit",
+          "distance": 1,
+          "throw_distance": 3,
+          "can_throw": true
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "root",
+          "value": 1,
+          "duration": 1
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "grab_target",
+        "cast": "lift_and_turn",
+        "impact": "throw_arc",
+        "post_cast": "reset_pose",
+        "priority": 2,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_define_pick_up_and_throw": true,
+        "must_define_throw_distance": true
+      },
+      "tags": ["carry", "throw", "utility", "control"]
+    },
+    {
+      "id": "life_steal_damage",
+      "name": "Vol de vie",
+      "category": "attack",
+      "subtype": "lifesteal",
+      "family": "damage",
+      "targeting": {
+        "mode": "enemy",
+        "range": {"min": 1, "max": 3},
+        "can_target_units": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 2,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "damage",
+          "damage_type": "physical_or_elemental",
+          "base": 20,
+          "scaling": "dmg_phys_or_dmg_elem",
+          "lifesteal_percent": 0.35
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "self_heal",
+          "value": 35,
+          "duration": 0
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "draw_energy",
+        "cast": "rune_siphon",
+        "impact": "life_reclaim",
+        "post_cast": "steady_breath",
+        "priority": 2,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_define_lifesteal_value": true,
+        "must_define_target_enemy": true
+      },
+      "tags": ["lifesteal", "damage", "sustain"]
+    },
+    {
+      "id": "delayed_damage",
+      "name": "Dégâts à retardement",
+      "category": "attack",
+      "subtype": "delayed",
+      "family": "damage",
+      "targeting": {
+        "mode": "enemy",
+        "range": {"min": 1, "max": 3},
+        "can_target_units": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 2,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "delayed_damage",
+          "delay": 1,
+          "trigger": "start_of_target_turn",
+          "base": 35,
+          "damage_type": "elemental"
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "marked_for_recoil",
+          "value": 1,
+          "duration": 1
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "suspend_time",
+        "cast": "sigil_ignite",
+        "impact": "shockwave_after_delay",
+        "post_cast": "wait",
+        "priority": 3,
+        "sync_with_hit": false
+      },
+      "validation": {
+        "must_define_delayed_trigger": true,
+        "must_define_target_enemy": true
+      },
+      "tags": ["delay", "damage", "punish"]
+    },
+    {
+      "id": "shared_damage_infection",
+      "name": "Dégâts partagés / infection",
+      "category": "attack",
+      "subtype": "shared_damage",
+      "family": "damage",
+      "targeting": {
+        "mode": "enemy",
+        "range": {"min": 1, "max": 3},
+        "can_target_units": true,
+        "can_link_multiple_targets": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 3,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "linked_damage",
+          "share_ratio": 1.0,
+          "link_type": "infection",
+          "base": 18
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "shared_damage_link",
+          "value": 1,
+          "duration": 2
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "draw_thread",
+        "cast": "crimson_link",
+        "impact": "shared_pulse",
+        "post_cast": "resonate",
+        "priority": 2,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_define_linked_targets": true,
+        "must_define_same_damage_distribution": true
+      },
+      "tags": ["infection", "link", "shared_damage"]
+    },
+    {
+      "id": "erosion_max_hp",
+      "name": "Érosion",
+      "category": "attack",
+      "subtype": "erosion",
+      "family": "damage",
+      "targeting": {
+        "mode": "enemy",
+        "range": {"min": 1, "max": 3},
+        "can_target_units": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 2,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "damage",
+          "damage_type": "elemental",
+          "base": 15,
+          "scaling": "dmg_elem",
+          "erodes_max_hp": true,
+          "erosion_value": 10
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "max_hp_erosion",
+          "value": 10,
+          "duration": 999
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "drain_shadow",
+        "cast": "rotating_cut",
+        "impact": "hollowing_bloom",
+        "post_cast": "fade_out",
+        "priority": 3,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_define_max_hp_reduction": true,
+        "must_define_permanent_erosion": true
+      },
+      "tags": ["erosion", "damage", "max_hp"]
+    },
+    {
+      "id": "heal_zone_persistent",
+      "name": "Soin de zone persistant",
+      "category": "support",
+      "subtype": "heal_zone",
+      "family": "heal",
+      "targeting": {
+        "mode": "tile_area",
+        "range": {"min": 1, "max": 4},
+        "radius": 2,
+        "target": "tile_area"
+      },
+      "shape": {
+        "type": "circle",
+        "radius": 2,
+        "cells": [[0, 0], [1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 3,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "terrain_zone",
+          "effect_type": "heal_over_time",
+          "base": 10,
+          "duration": 3,
+          "trigger": "end_of_turn"
+        }
+      ],
+      "status_effects": [],
+      "terrain_behavior": {
+        "changes_tile": true,
+        "creates_object": true,
+        "object_type": "zone",
+        "triggers_reaction": true
+      },
+      "animation": {
+        "pre_cast": "circle_rune",
+        "cast": "bloom_light",
+        "impact": "healing_wave",
+        "post_cast": "glow_hold",
+        "priority": 2,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_define_zone_heal": true,
+        "must_define_end_of_turn_trigger": true
+      },
+      "tags": ["heal", "zone", "persistent"]
+    },
+    {
+      "id": "armor_reduction",
+      "name": "Réduction d'armure / dégâts bruts",
+      "category": "support",
+      "subtype": "armor_break",
+      "family": "control",
+      "targeting": {
+        "mode": "enemy",
+        "range": {"min": 1, "max": 3},
+        "can_target_units": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 2,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "status",
+          "status": "armor_reduction",
+          "value": 15,
+          "duration": 2
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "armor_reduction",
+          "value": 15,
+          "duration": 2
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "mark_target",
+        "cast": "shatter_plate",
+        "impact": "metal_wound",
+        "post_cast": "release",
+        "priority": 2,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_define_armor_reduction": true,
+        "must_define_duration": true
+      },
+      "tags": ["armor", "debuff", "control"]
+    },
+    {
+      "id": "damage_sacrifice",
+      "name": "Sacrifice / partage de dégâts",
+      "category": "support",
+      "subtype": "sacrifice",
+      "family": "support",
+      "targeting": {
+        "mode": "ally",
+        "range": {"min": 0, "max": 3},
+        "can_target_self": true,
+        "can_target_units": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 2,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "damage_transfer",
+          "target": "ally",
+          "ratio": 1.0,
+          "duration": 2
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "sacrifice_link",
+          "value": 1,
+          "duration": 2
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "brace_partner",
+        "cast": "chain_guard",
+        "impact": "shield_transfer",
+        "post_cast": "recenter",
+        "priority": 2,
+        "sync_with_hit": false
+      },
+      "validation": {
+        "must_define_damage_transfer": true,
+        "must_define_link_duration": true
+      },
+      "tags": ["sacrifice", "support", "transfer"]
+    },
+    {
+      "id": "push_pull_control",
+      "name": "Poussée / attraction",
+      "category": "control",
+      "subtype": "push_pull",
+      "family": "control",
+      "targeting": {
+        "mode": "enemy",
+        "range": {"min": 1, "max": 4},
+        "can_target_units": true
+      },
+      "shape": {
+        "type": "line",
+        "length": 4,
+        "width": 1,
+        "cells": [[0, 0], [1, 0], [2, 0], [3, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 2,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "movement",
+          "movement_type": "push_or_pull",
+          "distance": 2,
+          "direction": "forward_or_toward_caster"
+        }
+      ],
+      "status_effects": [],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "gather_force",
+        "cast": "wave_push",
+        "impact": "linear_drag",
+        "post_cast": "settle",
+        "priority": 2,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_define_push_or_pull": true,
+        "must_define_distance": true
+      },
+      "tags": ["push", "pull", "control"]
+    },
+    {
+      "id": "teleport_swap",
+      "name": "Permutation / transposition",
+      "category": "mobility",
+      "subtype": "swap",
+      "family": "mobility",
+      "targeting": {
+        "mode": "ally_or_enemy",
+        "range": {"min": 1, "max": 3},
+        "can_target_units": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 3,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "swap_positions",
+          "target_a": "caster",
+          "target_b": "unit",
+          "ignore_obstacles": true
+        }
+      ],
+      "status_effects": [],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "cross_spark",
+        "cast": "mirror_shift",
+        "impact": "position_swap",
+        "post_cast": "stabilize",
+        "priority": 3,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_define_swap_logic": true,
+        "must_define_two_units": true
+      },
+      "tags": ["swap", "teleport", "reposition"]
+    },
+    {
+      "id": "diagonal_pull",
+      "name": "Attraction diagonale",
+      "category": "control",
+      "subtype": "diagonal_pull",
+      "family": "control",
+      "targeting": {
+        "mode": "enemy",
+        "range": {"min": 1, "max": 3},
+        "can_target_units": true,
+        "movement_axis": "diagonal_only"
+      },
+      "shape": {
+        "type": "diamond",
+        "radius": 3,
+        "cells": [[0, 0], [1, 1], [1, -1], [-1, 1], [-1, -1]],
+        "rotation": 45,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 2,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "movement",
+          "movement_type": "pull",
+          "distance": 2,
+          "diagonal_only": true
+        }
+      ],
+      "status_effects": [],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "angle_focus",
+        "cast": "spiral_draw",
+        "impact": "diagonal_collapse",
+        "post_cast": "center",
+        "priority": 2,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_define_diagonal_pull": true,
+        "must_define_diagonal_path": true
+      },
+      "tags": ["pull", "diagonal", "control"]
+    },
+    {
+      "id": "recall_object",
+      "name": "Rappel d'arme / objet",
+      "category": "utility",
+      "subtype": "recall",
+      "family": "object",
+      "targeting": {
+        "mode": "object",
+        "range": {"min": 1, "max": 5},
+        "can_target_object": true,
+        "can_target_self": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 2,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "recall_object",
+          "target": "placed_object_or_self",
+          "teleport_to_owner": true
+        }
+      ],
+      "status_effects": [],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "read_object",
+        "cast": "return_blink",
+        "impact": "beam_pull",
+        "post_cast": "snap_back",
+        "priority": 2,
+        "sync_with_hit": false
+      },
+      "validation": {
+        "must_define_target_object": true,
+        "must_define_return_logic": true
+      },
+      "tags": ["recall", "object", "teleport"]
+    },
+    {
+      "id": "summon_creature",
+      "name": "Invocation de créature",
+      "category": "summon",
+      "subtype": "creature",
+      "family": "summon",
+      "targeting": {
+        "mode": "tile",
+        "range": {"min": 1, "max": 3},
+        "can_target_tile": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 3,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "summon",
+          "unit_type": "ally_creature",
+          "hp": 180,
+          "behavior": "autonomous_or_controlled"
+        }
+      ],
+      "status_effects": [],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": true,
+        "object_type": "summon",
+        "triggers_reaction": true
+      },
+      "animation": {
+        "pre_cast": "ritual_circle",
+        "cast": "summon_appear",
+        "impact": "creature_manifest",
+        "post_cast": "stabilize",
+        "priority": 3,
+        "sync_with_hit": false
+      },
+      "validation": {
+        "must_define_summon_stats": true,
+        "must_define_tile_spawn": true
+      },
+      "tags": ["summon", "creature", "ally"]
+    },
+    {
+      "id": "fixed_structure",
+      "name": "Invocation de structure fixe",
+      "category": "terrain",
+      "subtype": "structure",
+      "family": "terrain",
+      "targeting": {
+        "mode": "tile",
+        "range": {"min": 1, "max": 4},
+        "can_target_tile": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 3,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "structure",
+          "structure_type": "obstacle_or_turret",
+          "hp": 220,
+          "trigger": "on_approach_or_on_turn"
+        }
+      ],
+      "status_effects": [],
+      "terrain_behavior": {
+        "changes_tile": true,
+        "creates_object": true,
+        "object_type": "structure",
+        "triggers_reaction": true
+      },
+      "animation": {
+        "pre_cast": "mark_ground",
+        "cast": "root_structure",
+        "impact": "stone_rise",
+        "post_cast": "hold_pose",
+        "priority": 3,
+        "sync_with_hit": false
+      },
+      "validation": {
+        "must_define_structure_hp": true,
+        "must_define_obstacle_behavior": true
+      },
+      "tags": ["structure", "terrain", "blocking"]
+    },
+    {
+      "id": "invisible_trap",
+      "name": "Piège invisible",
+      "category": "terrain",
+      "subtype": "trap",
+      "family": "terrain",
+      "targeting": {
+        "mode": "tile",
+        "range": {"min": 1, "max": 3},
+        "can_target_tile": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 2,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "trap",
+          "trigger": "on_unit_step",
+          "effect_type": "damage_or_push_or_retreat",
+          "radius": 1
+        }
+      ],
+      "status_effects": [],
+      "terrain_behavior": {
+        "changes_tile": true,
+        "creates_object": true,
+        "object_type": "trap",
+        "triggers_reaction": true
+      },
+      "animation": {
+        "pre_cast": "conceal_rune",
+        "cast": "trap_set",
+        "impact": "sudden_trigger",
+        "post_cast": "dissolve",
+        "priority": 2,
+        "sync_with_hit": false
+      },
+      "validation": {
+        "must_define_trigger_condition": true,
+        "must_define_hidden_state": true
+      },
+      "tags": ["trap", "hidden", "terrain"]
+    },
+    {
+      "id": "glyph_zone",
+      "name": "Glyphe de zone",
+      "category": "terrain",
+      "subtype": "glyph",
+      "family": "terrain",
+      "targeting": {
+        "mode": "tile_area",
+        "range": {"min": 1, "max": 4},
+        "radius": 2,
+        "target": "tile_area"
+      },
+      "shape": {
+        "type": "circle",
+        "radius": 2,
+        "cells": [[0, 0], [1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 3,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "terrain_zone",
+          "effect_type": "buff_or_debuff_on_entry_or_end_turn",
+          "duration": 3,
+          "target_filter": "ally_or_enemy"
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "zone_bonus_or_penalty",
+          "value": 1,
+          "duration": 2
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": true,
+        "creates_object": true,
+        "object_type": "glyph",
+        "triggers_reaction": true
+      },
+      "animation": {
+        "pre_cast": "draw_symbol",
+        "cast": "glyph_ignite",
+        "impact": "bright_rune",
+        "post_cast": "hold_glow",
+        "priority": 2,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_define_zone_effect": true,
+        "must_define_trigger_condition": true
+      },
+      "tags": ["glyph", "zone", "terrain", "buff_debuff"]
+    },
+    {
+      "id": "action_reduction",
+      "name": "Retrait de PA / PM",
+      "category": "control",
+      "subtype": "action_lock",
+      "family": "control",
+      "targeting": {
+        "mode": "enemy",
+        "range": {"min": 1, "max": 3},
+        "can_target_units": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 2,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "status",
+          "status": "pa_pm_reduction",
+          "value": 1,
+          "duration": 1
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "pa_reduction",
+          "value": 1,
+          "duration": 1
+        },
+        {
+          "type": "pm_reduction",
+          "value": 1,
+          "duration": 1
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "seal_hand",
+        "cast": "cut_motion",
+        "impact": "spent_energy",
+        "post_cast": "hold_ground",
+        "priority": 2,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_define_pa_or_pm_reduction": true,
+        "must_define_next_turn_effect": true
+      },
+      "tags": ["control", "pa", "pm"]
+    },
+    {
+      "id": "range_reduction",
+      "name": "Réduction de portée",
+      "category": "control",
+      "subtype": "range_lock",
+      "family": "control",
+      "targeting": {
+        "mode": "enemy",
+        "range": {"min": 1, "max": 4},
+        "can_target_units": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 2,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "status",
+          "status": "range_reduction",
+          "value": 2,
+          "duration": 2
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "range_reduction",
+          "value": 2,
+          "duration": 2
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "pin_target",
+        "cast": "shrink_arc",
+        "impact": "shortened_range",
+        "post_cast": "stiffen",
+        "priority": 2,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_define_range_penalty": true,
+        "must_define_duration": true
+      },
+      "tags": ["control", "range", "debuff"]
+    },
+    {
+      "id": "incurable_status",
+      "name": "Incurabilité",
+      "category": "control",
+      "subtype": "incurable",
+      "family": "control",
+      "targeting": {
+        "mode": "enemy",
+        "range": {"min": 1, "max": 3},
+        "can_target_units": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 2,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "status",
+          "status": "incurable",
+          "value": true,
+          "duration": 2
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "incurable",
+          "value": true,
+          "duration": 2
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "seal_life",
+        "cast": "null_wound",
+        "impact": "dry_vines",
+        "post_cast": "stillness",
+        "priority": 2,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_define_heal_block": true,
+        "must_define_duration": true
+      },
+      "tags": ["control", "incurable", "anti_heal"]
+    },
+    {
+      "id": "action_boost",
+      "name": "Don de PA / PM",
+      "category": "support",
+      "subtype": "boost",
+      "family": "support",
+      "targeting": {
+        "mode": "ally",
+        "range": {"min": 0, "max": 3},
+        "can_target_self": true,
+        "can_target_units": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 2,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "status",
+          "status": "action_boost",
+          "value": 1,
+          "duration": 1
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "pa_boost",
+          "value": 1,
+          "duration": 1
+        },
+        {
+          "type": "pm_boost",
+          "value": 1,
+          "duration": 1
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "steady_breath",
+        "cast": "wind_lift",
+        "impact": "action_surge",
+        "post_cast": "stand_tall",
+        "priority": 1,
+        "sync_with_hit": false
+      },
+      "validation": {
+        "must_define_next_turn_boost": true,
+        "must_define_target_ally": true
+      },
+      "tags": ["buff", "support", "action"]
+    },
+    {
+      "id": "purge_status",
+      "name": "Désenvoûtement / purge",
+      "category": "support",
+      "subtype": "purge",
+      "family": "support",
+      "targeting": {
+        "mode": "ally_or_enemy",
+        "range": {"min": 1, "max": 3},
+        "can_target_units": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 2,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "purge",
+          "remove_all_positive_or_negative_statuses": true,
+          "scope": "all"
+        }
+      ],
+      "status_effects": [],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "silence_ritual",
+        "cast": "purify_wave",
+        "impact": "clear_light",
+        "post_cast": "calm",
+        "priority": 2,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_define_status_removal": true,
+        "must_define_target_unit": true
+      },
+      "tags": ["purge", "support", "cleanse"]
+    },
+    {
+      "id": "posture_change",
+      "name": "Changement de posture / masques / états",
+      "category": "utility",
+      "subtype": "posture",
+      "family": "utility",
+      "targeting": {
+        "mode": "self",
+        "range": {"min": 0, "max": 0},
+        "can_target_self": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 1,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "posture_change",
+          "state": "mask_or_form",
+          "lock_skills": ["some_types"],
+          "unlock_skills": ["new_form"]
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "posture_state",
+          "value": "mask_or_form",
+          "duration": 999
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "stance_shift",
+        "cast": "mask_reveal",
+        "impact": "form_change",
+        "post_cast": "stillness",
+        "priority": 1,
+        "sync_with_hit": false
+      },
+      "validation": {
+        "must_define_posture_form": true,
+        "must_define_skill_swap": true
+      },
+      "tags": ["posture", "state", "utility"]
+    },
+    {
+      "id": "global_illusion_attack",
+      "name": "Attaque globale (illusion)",
+      "category": "ultimate",
+      "subtype": "global_illusion",
+      "family": "ultimate",
+      "targeting": {
+        "mode": "global",
+        "range": {"min": 0, "max": 999},
+        "ignores_obstacles": true,
+        "ignores_line_of_sight": true,
+        "hits_all_enemies": true
+      },
+      "shape": {
+        "type": "custom_mask",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 4,
+        "pm": 0,
+        "focus": 2,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "damage",
+          "damage_type": "elemental",
+          "base": 60,
+          "scope": "all_enemies_on_map"
+        }
+      ],
+      "status_effects": [],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "perfect_focus",
+        "cast": "world_echo",
+        "impact": "global_flash",
+        "post_cast": "silence_aftershock",
+        "priority": 5,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_ignore_range": true,
+        "must_ignore_los": true,
+        "must_hit_all_targets": true
+      },
+      "tags": ["ult", "global", "illusion", "damage"]
+    },
+    {
+      "id": "absolute_time_stop",
+      "name": "Altération temporelle absolue (Stop)",
+      "category": "control",
+      "subtype": "time_stop",
+      "family": "control",
+      "targeting": {
+        "mode": "enemy",
+        "range": {"min": 1, "max": 3},
+        "can_target_units": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 3,
+        "pm": 0,
+        "focus": 1,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "status",
+          "status": "time_stop",
+          "value": true,
+          "duration": 1
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "time_stop",
+          "value": true,
+          "duration": 1
+        },
+        {
+          "type": "skip_next_turn",
+          "value": true,
+          "duration": 1
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "freeze_air",
+        "cast": "still_clock",
+        "impact": "world_halt",
+        "post_cast": "echo_pause",
+        "priority": 5,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_skip_target_turn": true,
+        "must_block_dodge": true
+      },
+      "tags": ["time_stop", "control", "skip_turn"]
+    },
+    {
+      "id": "haste_slow_cycle",
+      "name": "Accélération / ralentissement (Haste / Slow)",
+      "category": "support",
+      "subtype": "initiative_change",
+      "family": "support",
+      "targeting": {
+        "mode": "ally_or_enemy",
+        "range": {"min": 1, "max": 4},
+        "can_target_units": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 2,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "status",
+          "status": "initiative_modifier",
+          "value": 2,
+          "duration": 2,
+          "direction": "increase_or_decrease"
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "haste",
+          "value": 2,
+          "duration": 2
+        },
+        {
+          "type": "slow",
+          "value": 2,
+          "duration": 2
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "turn_clock",
+        "cast": "tempo_wave",
+        "impact": "speed_ripple",
+        "post_cast": "settle",
+        "priority": 2,
+        "sync_with_hit": false
+      },
+      "validation": {
+        "must_modify_turn_order": true,
+        "must_define_duration": true
+      },
+      "tags": ["haste", "slow", "initiative", "tempo"]
+    },
+    {
+      "id": "doom_countdown",
+      "name": "Condamnation à mort (Doom)",
+      "category": "control",
+      "subtype": "doom",
+      "family": "status",
+      "targeting": {
+        "mode": "enemy",
+        "range": {"min": 1, "max": 3},
+        "can_target_units": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 3,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "status",
+          "status": "doom",
+          "value": 3,
+          "duration": 3,
+          "trigger": "before_end_of_turn_if_not_purged"
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "doom",
+          "value": 3,
+          "duration": 3
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "mark_death",
+        "cast": "grave_mark",
+        "impact": "shadow_clock",
+        "post_cast": "hollowing",
+        "priority": 4,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_define_countdown": true,
+        "must_define_if_not_purged_then_death": true
+      },
+      "tags": ["doom", "death", "status"]
+    },
+    {
+      "id": "frog_morph",
+      "name": "Morphose / crapaud (Frog)",
+      "category": "control",
+      "subtype": "morph",
+      "family": "status",
+      "targeting": {
+        "mode": "enemy",
+        "range": {"min": 1, "max": 3},
+        "can_target_units": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 3,
+        "pm": 0,
+        "focus": 1,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "status",
+          "status": "frog",
+          "value": true,
+          "duration": 2,
+          "disable_skills": true,
+          "reduced_stats": "all_to_zero"
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "frog",
+          "value": true,
+          "duration": 2
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "shape_twist",
+        "cast": "croak_transformation",
+        "impact": "mud_splash",
+        "post_cast": "still_hop",
+        "priority": 3,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_disable_skills": true,
+        "must_set_stats_to_weak_form": true
+      },
+      "tags": ["morph", "frog", "disable_skills"]
+    },
+    {
+      "id": "stone_petrification",
+      "name": "Pétrification (Stone)",
+      "category": "control",
+      "subtype": "stone",
+      "family": "status",
+      "targeting": {
+        "mode": "enemy",
+        "range": {"min": 1, "max": 3},
+        "can_target_units": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 3,
+        "pm": 0,
+        "focus": 1,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "status",
+          "status": "stone",
+          "value": true,
+          "duration": 2,
+          "immobile": true,
+          "immune_to_damage": true,
+          "counts_as_defeat_if_all_team_stone": true
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "stone",
+          "value": true,
+          "duration": 2
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "tighten_pulse",
+        "cast": "stone_form",
+        "impact": "statue_lock",
+        "post_cast": "mute_stillness",
+        "priority": 4,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_make_unit_immobile": true,
+        "must_mark_as_dead_for_victory_condition": true
+      },
+      "tags": ["stone", "petrify", "status"]
+    },
+    {
+      "id": "berserk_fury",
+      "name": "Folie / Berserk",
+      "category": "control",
+      "subtype": "berserk",
+      "family": "status",
+      "targeting": {
+        "mode": "enemy",
+        "range": {"min": 1, "max": 3},
+        "can_target_units": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 2,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "status",
+          "status": "berserk",
+          "value": true,
+          "duration": 2,
+          "mandatory_target": "nearest_target_in_melee",
+          "forced_attack": "basic_attack"
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "berserk",
+          "value": true,
+          "duration": 2
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "rage_breath",
+        "cast": "charge_madness",
+        "impact": "blind_attack",
+        "post_cast": "fall_back",
+        "priority": 3,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_force_basic_attack": true,
+        "must_prioritize_nearest_melee_target": true
+      },
+      "tags": ["berserk", "rage", "forced_attack"]
+    },
+    {
+      "id": "math_targeting",
+      "name": "Sort à ciblage mathématique",
+      "category": "utility",
+      "subtype": "conditional_target",
+      "family": "utility",
+      "targeting": {
+        "mode": "enemy",
+        "range": {"min": 1, "max": 4},
+        "can_target_units": true,
+        "condition": "target_level_or_hp_is_multiple_of_n"
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 2,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "damage",
+          "damage_type": "elemental",
+          "base": 25,
+          "conditional": "stat_multiple_of_value"
+        }
+      ],
+      "status_effects": [],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "calculate_symbol",
+        "cast": "math_rune",
+        "impact": "targeted_resonance",
+        "post_cast": "resolve",
+        "priority": 2,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_define_math_condition": true,
+        "must_filter_targets_by_stat": true
+      },
+      "tags": ["conditional", "math", "target_filter"]
+    },
+    {
+      "id": "spellblade_fusion",
+      "name": "Lame-Sort (Spellblade)",
+      "category": "utility",
+      "subtype": "spellblade",
+      "family": "utility",
+      "targeting": {
+        "mode": "enemy",
+        "range": {"min": 1, "max": 2},
+        "can_target_units": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 2,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "weapon_enchantment",
+          "effect_type": "magical_state_on_attack",
+          "status": "burn_or_mark",
+          "on_hit": "apply_magic_effect"
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "spellblade_mark",
+          "value": 1,
+          "duration": 1
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "edge_focus",
+        "cast": "blade_glow",
+        "impact": "arc_cut",
+        "post_cast": "steady_edge",
+        "priority": 2,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_affect_physical_attack": true,
+        "must_apply_magic_status": true
+      },
+      "tags": ["spellblade", "fusion", "weapon"]
+    },
+    {
+      "id": "anti_law_trickery",
+      "name": "Anti-Loi / Tricherie",
+      "category": "rule",
+      "subtype": "anti_law",
+      "family": "rule",
+      "targeting": {
+        "mode": "self",
+        "range": {"min": 0, "max": 0},
+        "can_target_self": true,
+        "temporarily_breaks_global_rule": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 2,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "rule_override",
+          "temporary_rule_bypass": "magic_allowed_while_banned",
+          "duration": 1
+        }
+      ],
+      "status_effects": [],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "break_ritual",
+        "cast": "law_bend",
+        "impact": "silver_ripple",
+        "post_cast": "transgress",
+        "priority": 3,
+        "sync_with_hit": false
+      },
+      "validation": {
+        "must_break_global_rule": true,
+        "must_define_duration": true
+      },
+      "tags": ["rule", "trickery", "override"]
+    },
+    {
+      "id": "judge_call_punishment",
+      "name": "Appel du Juge / Punition",
+      "category": "rule",
+      "subtype": "judgement",
+      "family": "rule",
+      "targeting": {
+        "mode": "enemy",
+        "range": {"min": 1, "max": 3},
+        "can_target_units": true,
+        "punishment": "rule_breaker"
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 3,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "status",
+          "status": "judged",
+          "value": true,
+          "duration": 1,
+          "exclusion_from_combat": true
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "prisoned",
+          "value": true,
+          "duration": 1
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "court_chamber",
+        "cast": "gavel_summon",
+        "impact": "judgement_flash",
+        "post_cast": "silence",
+        "priority": 4,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_remove_target_from_combat": true,
+        "must_check_rule_break": true
+      },
+      "tags": ["judge", "rule", "punishment"]
+    },
+    {
+      "id": "counter_attack_reaction",
+      "name": "Contre-attaque de réaction",
+      "category": "reaction",
+      "subtype": "counter",
+      "family": "reaction",
+      "targeting": {
+        "mode": "self",
+        "range": {"min": 0, "max": 0},
+        "can_target_self": true,
+        "trigger": "when_hit_by_damage"
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 0,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "reaction",
+          "trigger": "on_damage_received",
+          "effect_type": "reflect_projectile_or_teleport_or_steal",
+          "damage_ratio": 0.5
+        }
+      ],
+      "status_effects": [],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": true
+      },
+      "animation": {
+        "pre_cast": "brace_for_hit",
+        "cast": "counter_flash",
+        "impact": "retaliation_pulse",
+        "post_cast": "readjust",
+        "priority": 5,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_trigger_on_damage_received": true,
+        "must_define_reaction_effect": true
+      },
+      "tags": ["reaction", "counterattack", "defense"]
+    },
+    {
+      "id": "combo_attack_allies",
+      "name": "Attaque combinée (Combo)",
+      "category": "support",
+      "subtype": "combo",
+      "family": "support",
+      "targeting": {
+        "mode": "enemy",
+        "range": {"min": 1, "max": 4},
+        "can_target_units": true,
+        "triggers_allies_in_range": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 3,
+        "pm": 0,
+        "focus": 1,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "damage",
+          "damage_type": "physical_or_elemental",
+          "base": 35,
+          "scope": "primary_target",
+          "bonus_ally_hits": true,
+          "ally_hit_count": "all_allies_in_range"
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "combo_trigger",
+          "value": 1,
+          "duration": 1
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "focus_on_target",
+        "cast": "combo_signal",
+        "impact": "simultaneous_strikes",
+        "post_cast": "breath_reset",
+        "priority": 4,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_trigger_allies_in_range": true,
+        "must_consume_special_resource": true
+      },
+      "tags": ["combo", "support", "team_attack"]
+    },
+    {
+      "id": "time_advance_injunction",
+      "name": "Avancement de tour (Injonction)",
+      "category": "utility",
+      "subtype": "time_advance",
+      "family": "utility",
+      "targeting": {
+        "mode": "ally",
+        "range": {"min": 1, "max": 4},
+        "can_target_units": true,
+        "forces_turn_immediately": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 2,
+        "pm": 0,
+        "focus": 1,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "time_shift",
+          "target": "ally",
+          "shift": "advance_to_immediate_turn",
+          "duration": 1
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "initiative_advance",
+          "value": 1,
+          "duration": 1
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "pull_future",
+        "cast": "chronicle_surge",
+        "impact": "turn_jump",
+        "post_cast": "steady_time",
+        "priority": 5,
+        "sync_with_hit": false
+      },
+      "validation": {
+        "must_force_immediate_turn": true,
+        "must_override_initiative_order": true
+      },
+      "tags": ["time", "initiative", "utility"]
+    },
+    {
+      "id": "time_rewind_temporisation",
+      "name": "Recul de tour (Temporisation)",
+      "category": "control",
+      "subtype": "time_rewind",
+      "family": "control",
+      "targeting": {
+        "mode": "enemy",
+        "range": {"min": 1, "max": 4},
+        "can_target_units": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 3,
+        "pm": 0,
+        "focus": 1,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "time_shift",
+          "target": "enemy",
+          "shift": "move_to_end_of_turn_queue",
+          "duration": 1
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "turn_delay",
+          "value": 999,
+          "duration": 1
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "drag_clock",
+        "cast": "slow_tick",
+        "impact": "end_of_turn_push",
+        "post_cast": "cold_fall",
+        "priority": 4,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_delay_turn": true,
+        "must_push_to_end_of_timeline": true
+      },
+      "tags": ["time", "delay", "initiative"]
+    },
+    {
+      "id": "skill_energy_transfer",
+      "name": "Don de points de compétence (TP)",
+      "category": "support",
+      "subtype": "resource_transfer",
+      "family": "support",
+      "targeting": {
+        "mode": "ally",
+        "range": {"min": 1, "max": 3},
+        "can_target_units": true,
+        "resource_type": "mana_or_action_points"
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 2,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "resource_transfer",
+          "target": "ally",
+          "resource": "mana_or_pa",
+          "value": 2,
+          "instant_use": true
+        }
+      ],
+      "status_effects": [],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "channel_energy",
+        "cast": "spark_transfer",
+        "impact": "mana_ripple",
+        "post_cast": "empty_static",
+        "priority": 1,
+        "sync_with_hit": false
+      },
+      "validation": {
+        "must_transfer_resource": true,
+        "must_allow_immediate_cast": true
+      },
+      "tags": ["resource", "support", "tempo"]
+    },
+    {
+      "id": "ground_element_creation",
+      "name": "Création d'éléments au sol",
+      "category": "terrain",
+      "subtype": "surface_change",
+      "family": "terrain",
+      "targeting": {
+        "mode": "tile_area",
+        "range": {"min": 1, "max": 4},
+        "radius": 2,
+        "target": "tile_area"
+      },
+      "shape": {
+        "type": "circle",
+        "radius": 2,
+        "cells": [[0, 0], [1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 2,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "terrain_zone",
+          "effect_type": "freeze_or_set_fire",
+          "duration": 3,
+          "surface": "ice_or_fire"
+        }
+      ],
+      "status_effects": [],
+      "terrain_behavior": {
+        "changes_tile": true,
+        "creates_object": true,
+        "object_type": "surface",
+        "triggers_reaction": true
+      },
+      "animation": {
+        "pre_cast": "ground_focus",
+        "cast": "earth_ritual",
+        "impact": "surface_change",
+        "post_cast": "settle_glow",
+        "priority": 2,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_change_ground_surface": true,
+        "must_define_zone_duration": true
+      },
+      "tags": ["terrain", "surface", "element"]
+    },
+    {
+      "id": "elemental_chain_reaction",
+      "name": "Réaction en chaîne élémentaire",
+      "category": "damage",
+      "subtype": "chain_reaction",
+      "family": "damage",
+      "targeting": {
+        "mode": "tile_area",
+        "range": {"min": 1, "max": 4},
+        "radius": 2,
+        "target": "tile_area",
+        "triggers_connective_water_propagation": true
+      },
+      "shape": {
+        "type": "circle",
+        "radius": 2,
+        "cells": [[0, 0], [1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 3,
+        "pm": 0,
+        "focus": 1,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "damage",
+          "damage_type": "electric",
+          "base": 30,
+          "propagates_to_connected_water_tiles": true
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "electrified",
+          "value": 1,
+          "duration": 1
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": true
+      },
+      "animation": {
+        "pre_cast": "charge_arc",
+        "cast": "water_chain",
+        "impact": "lightning_bloom",
+        "post_cast": "resonate",
+        "priority": 4,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_propagate_to_connected_water_tiles": true,
+        "must_hit_entities_in_path": true
+      },
+      "tags": ["chain", "electricity", "terrain_reaction"]
+    },
+    {
+      "id": "zone_melt",
+      "name": "Fonte de zone",
+      "category": "terrain",
+      "subtype": "zone_melt",
+      "family": "terrain",
+      "targeting": {
+        "mode": "tile_area",
+        "range": {"min": 1, "max": 3},
+        "radius": 2,
+        "target": "tile_area"
+      },
+      "shape": {
+        "type": "circle",
+        "radius": 2,
+        "cells": [[0, 0], [1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 2,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "terrain_zone",
+          "effect_type": "melt_ice_to_water",
+          "duration": 2,
+          "surface_change": true
+        }
+      ],
+      "status_effects": [],
+      "terrain_behavior": {
+        "changes_tile": true,
+        "creates_object": false,
+        "triggers_reaction": true
+      },
+      "animation": {
+        "pre_cast": "warm_mark",
+        "cast": "melt_rune",
+        "impact": "water_surge",
+        "post_cast": "steam_release",
+        "priority": 2,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_change_ice_to_water": true,
+        "must_modify_synergies": true
+      },
+      "tags": ["melt", "ice", "water", "terrain"]
+    },
+    {
+      "id": "inversion_arrow",
+      "name": "Flèche d'inversion",
+      "category": "control",
+      "subtype": "turn_around",
+      "family": "control",
+      "targeting": {
+        "mode": "enemy",
+        "range": {"min": 1, "max": 3},
+        "can_target_units": true,
+        "turns_target_180_degrees": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 2,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "status",
+          "status": "exposed_back",
+          "value": true,
+          "duration": 1
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "facing_reversed",
+          "value": true,
+          "duration": 1
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "pin_target",
+        "cast": "turning_dart",
+        "impact": "back_exposed",
+        "post_cast": "stable",
+        "priority": 2,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_turn_target_around": true,
+        "must_expose_back": true
+      },
+      "tags": ["facing", "crit", "control"]
+    },
+    {
+      "id": "downward_push_fall_damage",
+      "name": "Poussée en contrebas / dégâts de chute",
+      "category": "damage",
+      "subtype": "fall_damage",
+      "family": "damage",
+      "targeting": {
+        "mode": "enemy",
+        "range": {"min": 1, "max": 4},
+        "can_target_units": true,
+        "fall_damage_if_dropped_to_lower_height": true
+      },
+      "shape": {
+        "type": "line",
+        "length": 4,
+        "width": 1,
+        "cells": [[0, 0], [1, 0], [2, 0], [3, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 2,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "movement",
+          "movement_type": "push",
+          "distance": 2,
+          "fall_damage_bonus": true,
+          "bonus_damage": 35
+        }
+      ],
+      "status_effects": [],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "edge_focus",
+        "cast": "drop_wave",
+        "impact": "fall_crash",
+        "post_cast": "settle",
+        "priority": 3,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_push_target_off_height": true,
+        "must_apply_fall_damage_bonus": true
+      },
+      "tags": ["push", "fall_damage", "environment"]
+    },
+    {
+      "id": "vertical_climb_ladder",
+      "name": "Sort d'échelle / escalade",
+      "category": "mobility",
+      "subtype": "climb",
+      "family": "mobility",
+      "targeting": {
+        "mode": "tile",
+        "range": {"min": 1, "max": 3},
+        "can_target_tile": true,
+        "creates_vertical_access": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 2,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "terrain_object",
+          "object_type": "climb_path",
+          "duration": 2,
+          "allows_vertical_movement": true
+        }
+      ],
+      "status_effects": [],
+      "terrain_behavior": {
+        "changes_tile": true,
+        "creates_object": true,
+        "object_type": "climb_path",
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "reach_upward",
+        "cast": "rung_appear",
+        "impact": "vertical_bridge",
+        "post_cast": "hold_path",
+        "priority": 2,
+        "sync_with_hit": false
+      },
+      "validation": {
+        "must_create_elevation_access": true,
+        "must_allow_vertical_climb": true
+      },
+      "tags": ["climb", "mobility", "vertical"]
+    },
+    {
+      "id": "decoy_aggro",
+      "name": "Leurre / épouvantail fixe",
+      "category": "control",
+      "subtype": "decoy",
+      "family": "control",
+      "targeting": {
+        "mode": "tile",
+        "range": {"min": 1, "max": 3},
+        "can_target_tile": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 3,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "summon",
+          "unit_type": "decoy",
+          "aggro": 999,
+          "behavior": "immobile_and_targeted_by_enemies"
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "aggro_lock",
+          "value": 999,
+          "duration": 2
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": true,
+        "object_type": "decoy",
+        "triggers_reaction": true
+      },
+      "animation": {
+        "pre_cast": "false_signal",
+        "cast": "decoy_form",
+        "impact": "aggressive_glow",
+        "post_cast": "hold_pose",
+        "priority": 2,
+        "sync_with_hit": false
+      },
+      "validation": {
+        "must_force_enemy_targeting": true,
+        "must_have_absolute_aggro": true
+      },
+      "tags": ["decoy", "aggro", "taunt"]
+    },
+    {
+      "id": "mental_provocation",
+      "name": "Provocation mentale",
+      "category": "control",
+      "subtype": "mental_provoke",
+      "family": "control",
+      "targeting": {
+        "mode": "enemy",
+        "range": {"min": 1, "max": 3},
+        "can_target_units": true,
+        "forced_movement": "towards_caster",
+        "must_attack_melee": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 2,
+        "pm": 0,
+        "focus": 1,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "status",
+          "status": "provoked",
+          "value": true,
+          "duration": 2
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "forced_charge",
+          "value": true,
+          "duration": 2
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "mind_pull",
+        "cast": "rage_bellow",
+        "impact": "target_charge",
+        "post_cast": "snap_back",
+        "priority": 3,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_drag_enemy_towards_caster": true,
+        "must_forbid_defensive_position": true
+      },
+      "tags": ["aggro", "provocation", "mental_control"]
+    },
+    {
+      "id": "copy_skill_mimicry",
+      "name": "Copie de capacité (Mimétisme)",
+      "category": "utility",
+      "subtype": "copy_skill",
+      "family": "utility",
+      "targeting": {
+        "mode": "ally_or_enemy",
+        "range": {"min": 1, "max": 3},
+        "can_target_units": true,
+        "copies_last_used_skill": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 3,
+        "pm": 0,
+        "focus": 1,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "skill_copy",
+          "target": "enemy_or_ally",
+          "copy_last_used_skill": true,
+          "usable_on_next_turn": true
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "skill_mimic",
+          "value": 1,
+          "duration": 1
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "mirror_watch",
+        "cast": "copy_sigils",
+        "impact": "mimic_flash",
+        "post_cast": "steady_mask",
+        "priority": 4,
+        "sync_with_hit": false
+      },
+      "validation": {
+        "must_copy_last_skill": true,
+        "must_be_usable_next_turn": true
+      },
+      "tags": ["mimic", "copy", "steal_skill"]
+    },
+    {
+      "id": "shadow_infiltration",
+      "name": "Infiltration dans l'ombre",
+      "category": "stealth",
+      "subtype": "shadow_infiltration",
+      "family": "stealth",
+      "targeting": {
+        "mode": "self",
+        "range": {"min": 0, "max": 0},
+        "can_target_self": true,
+        "invisibility": true,
+        "bonus_move_range_if_hiding_in_back": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 2,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "status",
+          "status": "invisibility",
+          "value": true,
+          "duration": 2,
+          "double_movement_range_if_hidden": true
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "invisible",
+          "value": true,
+          "duration": 2
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "step_into_shadow",
+        "cast": "fade_behind_eyes",
+        "impact": "silhouette_blob",
+        "post_cast": "wait_in_darkness",
+        "priority": 1,
+        "sync_with_hit": false
+      },
+      "validation": {
+        "must_be_invisible": true,
+        "must_double_movement_range_while_hidden": true
+      },
+      "tags": ["stealth", "infiltration", "movement"]
+    },
+    {
+      "id": "chronal_reset_cycle",
+      "name": "Réinitialisation du cycle chronal",
+      "category": "utility",
+      "subtype": "turn_reset",
+      "family": "utility",
+      "targeting": {
+        "mode": "self",
+        "range": {"min": 0, "max": 0},
+        "can_target_self": true,
+        "trigger": "on_death_or_after_critical_fail",
+        "resets_current_turn_state": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 0,
+        "pm": 0,
+        "focus": 1,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "status",
+          "status": "cycle_reset",
+          "value": true,
+          "duration": 1,
+          "clear_pa_pm_status": true,
+          "restore_previous_position": true
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "rewind_anchor",
+          "value": true,
+          "duration": 1
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "pulse_backwards",
+        "cast": "time_ring",
+        "impact": "reversal_flash",
+        "post_cast": "resume_flow",
+        "priority": 5,
+        "sync_with_hit": false
+      },
+      "validation": {
+        "must_restore_before_turn_state": true,
+        "must_define_trigger": true
+      },
+      "tags": ["reset", "chronos", "turn_reversal"]
+    },
+    {
+      "id": "ritual_of_risk",
+      "name": "Rituel du pari de fortune",
+      "category": "utility",
+      "subtype": "mini_game_scaling",
+      "family": "utility",
+      "targeting": {
+        "mode": "enemy",
+        "range": {"min": 1, "max": 3},
+        "can_target_units": true,
+        "scales_with_risk_taken": true,
+        "uses_minigame_resolution": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 2,
+        "pm": 0,
+        "focus": 1,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "damage",
+          "damage_type": "elemental",
+          "base": 20,
+          "formula": "base + risk_score * bonus_per_success",
+          "minigame_trigger": true
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "chance_cascade",
+          "value": 1,
+          "duration": 2
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "shake_dice",
+        "cast": "rune_circle",
+        "impact": "high_stakes_flash",
+        "post_cast": "settle_bets",
+        "priority": 4,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_scale_with_risk": true,
+        "must_have_mini_game_resolution": true
+      },
+      "tags": ["risk", "bet", "mini_game", "scaling"]
+    },
+    {
+      "id": "interception_sigil",
+      "name": "Sceau d'interception",
+      "category": "control",
+      "subtype": "interception_wall",
+      "family": "control",
+      "targeting": {
+        "mode": "wall_segment",
+        "range": {"min": 1, "max": 3},
+        "can_target_tile": true,
+        "creates_wall_segment": true,
+        "blocks_projectiles_and_moves": true
+      },
+      "shape": {
+        "type": "line",
+        "length": 3,
+        "width": 1,
+        "cells": [[0, 0], [1, 0], [2, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 2,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "terrain_object",
+          "object_type": "interception_wall",
+          "duration": 2,
+          "block_aim_lines": true,
+          "redirect_hits": true
+        }
+      ],
+      "status_effects": [],
+      "terrain_behavior": {
+        "changes_tile": true,
+        "creates_object": true,
+        "object_type": "interception_wall",
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "mark_ground",
+        "cast": "wall_rise",
+        "impact": "shield_anchor",
+        "post_cast": "hold_line",
+        "priority": 2,
+        "sync_with_hit": false
+      },
+      "validation": {
+        "must_create_wall_segment": true,
+        "must_block_projectile_path": true
+      },
+      "tags": ["wall", "interception", "zone_control"]
+    },
+    {
+      "id": "conditional_camouflage",
+      "name": "Camouflage conditionnel",
+      "category": "stealth",
+      "subtype": "conditional_stealth",
+      "family": "stealth",
+      "targeting": {
+        "mode": "self",
+        "range": {"min": 0, "max": 0},
+        "can_target_self": true,
+        "becomes_invisible_if_condition_met": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 2,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "status",
+          "status": "conditional_camouflage",
+          "value": true,
+          "duration": 2,
+          "hidden_if": "no_enemy_in_line_of_sight_or_behind_terrain"
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "masking",
+          "value": true,
+          "duration": 2
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "blend_into_env",
+        "cast": "still_mist",
+        "impact": "color_shift",
+        "post_cast": "hold_fog",
+        "priority": 1,
+        "sync_with_hit": false
+      },
+      "validation": {
+        "must_require_condition_for_stealth": true,
+        "must_not_be_permanent": true
+      },
+      "tags": ["stealth", "conditional", "camouflage"]
+    },
+    {
+      "id": "morphic_link",
+      "name": "Lien morphique",
+      "category": "support",
+      "subtype": "attribute_link",
+      "family": "support",
+      "targeting": {
+        "mode": "ally",
+        "range": {"min": 1, "max": 3},
+        "can_target_units": true,
+        "shares_attributes_or_shape": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 2,
+        "pm": 0,
+        "focus": 1,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "status",
+          "status": "morphic_link",
+          "value": true,
+          "duration": 2,
+          "share_damage_taken": true,
+          "share_attribute_bonus": true
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "linked_form",
+          "value": 1,
+          "duration": 2
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "draw_bridge",
+        "cast": "shared_shape",
+        "impact": "silk_thread",
+        "post_cast": "sync_pattern",
+        "priority": 3,
+        "sync_with_hit": false
+      },
+      "validation": {
+        "must_link_two_units": true,
+        "must_share_stats_or_damage": true
+      },
+      "tags": ["link", "support", "morphic"]
+    },
+    {
+      "id": "overgrowth_veil",
+      "name": "Voile de végétation opaque",
+      "category": "terrain",
+      "subtype": "fog_vegetation",
+      "family": "terrain",
+      "targeting": {
+        "mode": "tile_area",
+        "range": {"min": 1, "max": 3},
+        "radius": 2,
+        "can_target_tile": true,
+        "creates_fog_of_war": true
+      },
+      "shape": {
+        "type": "circle",
+        "radius": 2,
+        "cells": [[0, 0], [1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 3,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "terrain_zone",
+          "effect_type": "vegetal_fog",
+          "duration": 2,
+          "obscures_vision": true,
+          "gives_cover": true
+        }
+      ],
+      "status_effects": [],
+      "terrain_behavior": {
+        "changes_tile": true,
+        "creates_object": true,
+        "object_type": "vegetal_fog",
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "grow_reeds",
+        "cast": "veil_spread",
+        "impact": "leaf_wall",
+        "post_cast": "breathe_shadow",
+        "priority": 2,
+        "sync_with_hit": false
+      },
+      "validation": {
+        "must_obscure_vision": true,
+        "must_give_cover_or_reduced_line_of_sight": true
+      },
+      "tags": ["fog", "vegetation", "vision_control"]
+    },
+    {
+      "id": "fractured_copy",
+      "name": "Copie fragmentée",
+      "category": "utility",
+      "subtype": "duplicate",
+      "family": "utility",
+      "targeting": {
+        "mode": "enemy",
+        "range": {"min": 1, "max": 3},
+        "can_target_units": true,
+        "duplicates_target_as_shadow": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 3,
+        "pm": 0,
+        "focus": 1,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "summon",
+          "unit_type": "shadow_copy",
+          "copies_target_stats": true,
+          "duration": 2,
+          "behavior": "auto_attack_with_reduced_accuracy"
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "duplicate_shadow",
+          "value": true,
+          "duration": 2
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "split_reflection",
+        "cast": "duplicate_sigil",
+        "impact": "mirror_break",
+        "post_cast": "hold_ghost",
+        "priority": 4,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_create_shadow_copy": true,
+        "must_derive_from_target_state": true
+      },
+      "tags": ["copy", "duplication", "shadow"]
+    },
+    {
+      "id": "grave_recall",
+      "name": "Appel du tombeau",
+      "category": "revive",
+      "subtype": "corpse_necromancy",
+      "family": "revive",
+      "targeting": {
+        "mode": "object",
+        "range": {"min": 1, "max": 3},
+        "can_target_corpse": true,
+        "requires_dead_body": true,
+        "reanimates_unit": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 3,
+        "pm": 0,
+        "focus": 1,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "revive",
+          "effect_type": "corpse_reanimation",
+          "duration": 1,
+          "limited_life": true
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "grave_flux",
+          "value": true,
+          "duration": 1
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "trace_runes",
+        "cast": "bone_bloom",
+        "impact": "grave_glow",
+        "post_cast": "return_to_earth",
+        "priority": 4,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_require_corpse_or_dead_body": true,
+        "must_reanimate_for_short_duration": true
+      },
+      "tags": ["necromancy", "corpse", "revive"]
+    },
+    {
+      "id": "seal_the_ring",
+      "name": "Scellage du cercle",
+      "category": "rule",
+      "subtype": "arena_closure",
+      "family": "rule",
+      "targeting": {
+        "mode": "self",
+        "range": {"min": 0, "max": 0},
+        "can_target_self": true,
+        "shrinks_battlefield": true,
+        "closes_terrain_ring": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 3,
+        "pm": 0,
+        "focus": 1,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "rule_override",
+          "temporary_rule_bypass": "restrict_arena_boundaries",
+          "duration": 2,
+          "closes_ring": true
+        }
+      ],
+      "status_effects": [],
+      "terrain_behavior": {
+        "changes_tile": true,
+        "creates_object": true,
+        "object_type": "arena_barrier",
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "draw_circle",
+        "cast": "ring_lock",
+        "impact": "barrier_constrict",
+        "post_cast": "hold_false_horizon",
+        "priority": 4,
+        "sync_with_hit": false
+      },
+      "validation": {
+        "must_shrink_or_close_arena": true,
+        "must_create_tactical_pressure": true
+      },
+      "tags": ["arena", "compression", "rule"]
+    },
+    {
+      "id": "vortex_pull",
+      "name": "Vortex d'attraction",
+      "category": "control",
+      "subtype": "vortex",
+      "family": "control",
+      "targeting": {
+        "mode": "tile_area",
+        "range": {"min": 1, "max": 3},
+        "radius": 2,
+        "can_target_tile": true,
+        "pulls_units_towards_center": true
+      },
+      "shape": {
+        "type": "circle",
+        "radius": 2,
+        "cells": [[0, 0], [1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 3,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "movement",
+          "movement_type": "pull",
+          "distance": 2,
+          "centered_on_target_tile": true
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "dragged_in",
+          "value": true,
+          "duration": 1
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "pull_air",
+        "cast": "spiral_ring",
+        "impact": "vacuum_ripple",
+        "post_cast": "recenter",
+        "priority": 3,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_pull_units_towards_center": true,
+        "must_have_aoe_radius": true
+      },
+      "tags": ["vortex", "pull", "control"]
+    },
+    {
+      "id": "banishment_anchor",
+      "name": "Bannissement d'ancre",
+      "category": "rule",
+      "subtype": "banish",
+      "family": "rule",
+      "targeting": {
+        "mode": "enemy",
+        "range": {"min": 1, "max": 4},
+        "can_target_units": true,
+        "removes_entity_from_map": true,
+        "returns_to_void": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 3,
+        "pm": 0,
+        "focus": 1,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "status",
+          "status": "banished",
+          "value": true,
+          "duration": 1,
+          "remove_from_battlefield": true
+        }
+      ],
+      "status_effects": [
+        {
+          "type": "void_lock",
+          "value": true,
+          "duration": 1
+        }
+      ],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "seal_eye",
+        "cast": "void_gate",
+        "impact": "null_hole",
+        "post_cast": "vacuum_sigh",
+        "priority": 5,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_remove_target_from_map": true,
+        "must_define_return_condition": true
+      },
+      "tags": ["banish", "void", "rule"]
+    },
+    {
+      "id": "quietus_global_boon",
+      "name": "Sort global d'atout (Quietus)",
+      "category": "ultimate",
+      "subtype": "global_boon",
+      "family": "ultimate",
+      "targeting": {
+        "mode": "self",
+        "range": {"min": 0, "max": 0},
+        "can_target_self": true,
+        "trigger": "any_time_out_of_turn",
+        "consumes_no_resource": true,
+        "limited_once_per_combat": true
+      },
+      "shape": {
+        "type": "point",
+        "cells": [[0, 0]],
+        "rotation": 0,
+        "scale": 1
+      },
+      "cost": {
+        "pa": 0,
+        "pm": 0,
+        "focus": 0,
+        "energy": 0
+      },
+      "effects": [
+        {
+          "kind": "global_boon",
+          "effect_type": "instant_team_teleport_or_revive_or_ward",
+          "once_per_combat": true,
+          "trigger_any_time": true
+        }
+      ],
+      "status_effects": [],
+      "terrain_behavior": {
+        "changes_tile": false,
+        "creates_object": false,
+        "triggers_reaction": false
+      },
+      "animation": {
+        "pre_cast": "silence_the_world",
+        "cast": "quietus_rise",
+        "impact": "global_aura",
+        "post_cast": "all_still",
+        "priority": 6,
+        "sync_with_hit": true
+      },
+      "validation": {
+        "must_trigger_any_time": true,
+        "must_not_consume_resources": true,
+        "must_be_limited_to_one_use": true
+      },
+      "tags": ["quietus", "ultimate", "out_of_turn"]
+    }
+  ]
+}

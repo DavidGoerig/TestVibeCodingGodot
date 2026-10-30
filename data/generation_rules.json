@@ -1,0 +1,43 @@
+{
+  "generation_version": 1,
+  "roster": {
+    "monolithes_total": 216,
+    "hybrids_total": 66,
+    "total_champions": 282,
+    "classes_count": 18,
+    "elements_count": 18
+  },
+  "rules": {
+    "pur_champion": {
+      "combination": "class_id x element_id",
+      "count": 216,
+      "requirement": [
+        "class_identity",
+        "element_identity",
+        "terrain_interaction",
+        "passive_signature",
+        "skill_signature"
+      ]
+    },
+    "hybrid_champion": {
+      "combination": "element_id x element_id_other",
+      "count": 132,
+      "requirement": [
+        "distinct_pair_behavior",
+        "unique_combo_signature",
+        "clear_weakness",
+        "clear_synergy"
+      ],
+      "pair_exclusion": "same_element_is_forbidden"
+    },
+    "validation": {
+      "must_have": [
+        "clear_role",
+        "clear_terrain_impact",
+        "clear_tactical_weakness",
+        "recognizable_signature",
+        "not_too_similar_to_other_champions"
+      ]
+    }
+  }
+}

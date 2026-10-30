@@ -1,0 +1,1139 @@
+{
+  "schema_version": 2,
+  "template_name": "full_runtime_champion",
+  "version_notes": "This is the exhaustive runtime model for any champion in the roster. It includes gameplay identity, stats, balance review, combat phases, skill data, special objects, animation flow, and validation rules.",
+  "champion": {
+    "id": "champion_id",
+    "name": "Champion Name",
+    "display_name": "Champion Name",
+    "title": "Archetype title",
+    "rarity": "common",
+    "class_id": "briseur",
+    "class_name": "Briseur",
+    "primary_element": "fire",
+    "secondary_element": null,
+    "is_hybrid": false,
+    "archetype_group": "heavy",
+    "role_primary": "initiator",
+    "role_secondary": "off_tank",
+    "faction": "neutral",
+    "tags": [
+      "terrain",
+      "burst",
+      "push",
+      "initiative",
+      "control"
+    ],
+    "identity": {
+      "battle_idea": "A champion that turns the map into a weapon and breaks enemy positioning.",
+      "win_condition": "Open lanes, destabilize the enemy front, and punish exposed targets.",
+      "preferred_range": "melee",
+      "attack_style": "linear_charge",
+      "tempo": "aggressive",
+      "threat_level": 3,
+      "readability": "high",
+      "complexity": "medium"
+    },
+    "physical_profile": {
+      "world_context": "This world is saturated by the 18 elemental forces. Through centuries of residue, contact, or mutation, many humans now bear visible marks of the elements on their bodies.",
+      "build": {
+        "frame": "athletic",
+        "height": "average",
+        "stance": "forward_weighted",
+        "movement_style": "heavy_stride"
+      },
+      "appearance": {
+        "skin_tone": "earthy tan",
+        "hair": "short cropped hair",
+        "eyes": "alert amber eyes",
+        "face": "scarred jawline",
+        "posture": "always leaning into the next impact"
+      },
+      "visible_marks": [
+        {
+          "location": "left_foot",
+          "element": "fire",
+          "mark_type": "charred_palmprint",
+          "description": "The sole of the left foot is blackened and blistered, as if it was forged in an ember field.",
+          "active_effect": "leaves warm ash when the champion charges"
+        },
+        {
+          "location": "right_hand",
+          "element": "ice",
+          "mark_type": "frosted_fingertips",
+          "description": "The fingertips of the right hand remain perpetually cold and sharp, with frost crystal streaks under the nails.",
+          "active_effect": "slight frost sheen when the champion grips a weapon"
+        }
+      ],
+      "elemental_signature": {
+        "primary_element": "fire",
+        "secondary_element": null,
+        "visible_aura": "low ember glow on the lower limbs",
+        "reacts_to_environment": true,
+        "intensity": "moderate"
+      },
+      "body_mutations": [
+        "scarred forearm with a cracked rune pattern",
+        "one knee reinforced by dense mineral growth",
+        "vein-like spark lines running beneath the skin when angry"
+      ],
+      "scar_story": "The body bears the memory of a failed encounter with raw elemental fallout. The scars are not purely cosmetic; they visibly react to weather and combat.",
+      "character_pose": "One shoulder is set lower than the other from repeated impacts; the champion stands like a structure about to break and rebuild itself.",
+      "combat_signature_visual": {
+        "when_ready": "the skin glows faintly and the elemental marks pulse in rhythm",
+        "when_attacking": "embers and frost trace the lines of motion for one beat before impact",
+        "when_staggered": "the mark darkens and cracks, showing the strain of the mutation"
+      }
+    },
+    "combat_profile": {
+      "damage_profile": {
+        "physical": 0.55,
+        "elemental": 0.45,
+        "burst": 0.7,
+        "sustain": 0.3,
+        "finisher": 0.5
+      },
+      "control_profile": {
+        "stun": 0.2,
+        "root": 0.1,
+        "push": 0.4,
+        "pull": 0.1,
+        "slow": 0.2,
+        "silence": 0.1,
+        "zone_lock": 0.3
+      },
+      "mobility_profile": {
+        "dash": 0.2,
+        "teleport": 0.0,
+        "reposition": 0.4,
+        "evade": 0.2,
+        "path_control": 0.3
+      },
+      "sustain_profile": {
+        "shield": 0.1,
+        "heal": 0.0,
+        "armor": 0.2,
+        "recover_after_hit": 0.1,
+        "survival": 0.3
+      },
+      "terrain_profile": {
+        "terrain_change": 0.8,
+        "obstacle_creation": 0.5,
+        "trap_creation": 0.2,
+        "glyph_creation": 0.2,
+        "map_control": 0.6
+      },
+      "utility_profile": {
+        "buff": 0.2,
+        "debuff": 0.3,
+        "ally_support": 0.2,
+        "combo_link": 0.4,
+        "team_impact": 0.6
+      },
+      "risk_profile": {
+        "fragility": 0.4,
+        "setup_dependency": 0.3,
+        "positional_risk": 0.5,
+        "counterplay": 0.4
+      }
+    },
+    "stats": {
+      "base": {
+        "pv": 1250,
+        "pa": 8,
+        "pm": 4,
+        "initiative": 1000,
+        "dmg_phys": 130,
+        "dmg_elem": 100,
+        "tacle": 120,
+        "crit": 5,
+        "crit_damage": 1.5,
+        "armor": 15,
+        "resistance": 15,
+        "precision": 100,
+        "evasion": 20
+      },
+      "growth_per_level": {
+        "pv": 45,
+        "pa": 0,
+        "pm": 0,
+        "initiative": 18,
+        "dmg_phys": 4,
+        "dmg_elem": 3,
+        "tacle": 3,
+        "crit": 0.3,
+        "armor": 1,
+        "resistance": 1
+      },
+      "resistances": {
+        "fire": 0,
+        "water": 0,
+        "electric": 0,
+        "ground": 0,
+        "grass": 0,
+        "ice": 0,
+        "poison": 0,
+        "psychic": 0,
+        "metal": 0,
+        "shadow": 0,
+        "flying": 0,
+        "normal": 0
+      }
+    },
+    "balance_tokens": {
+      "power": 4,
+      "control": 3,
+      "mobility": 2,
+      "sustain": 2,
+      "utility": 4,
+      "terrain": 5,
+      "setup": 3,
+      "risk": 3,
+      "combo": 4,
+      "readability": 4
+    },
+    "ability_profile": {
+      "attack_style": "linear_charge",
+      "hit_pattern": "single_target",
+      "cast_pattern": [
+        "windup",
+        "travel",
+        "impact",
+        "recover"
+      ],
+      "requires_line_of_sight": true,
+      "requires_terrain": false,
+      "generated_terrain": [
+        "debris",
+        "wall",
+        "barricade"
+      ],
+      "generated_statuses": [
+        "mark_terrain_break",
+        "push",
+        "exposed"
+      ],
+      "summons": [],
+      "traps": [],
+      "glyphs": []
+    },
+    "passives": {
+      "class_passive": {
+        "id": "class_passive_breaker",
+        "name": "Brise-structure",
+        "description": "This champion gains value when it breaks terrain or destroys obstacles.",
+        "trigger": "on_obstacle_destroyed",
+        "effect": {
+          "type": "buff_self",
+          "stat": "initiative",
+          "value": 15,
+          "duration": 1
+        }
+      },
+      "element_passive": {
+        "id": "element_passive_fire",
+        "name": "Ignition",
+        "description": "After using a terrain-changing skill, the champion creates a small damaging zone.",
+        "trigger": "on_terrain_change",
+        "effect": {
+          "type": "aoe_damage",
+          "damage_type": "elemental",
+          "base": 15,
+          "radius": 1,
+          "duration": 1
+        }
+      },
+      "terrain_interaction": {
+        "id": "terrain_interaction_bonus",
+        "name": "Route Control",
+        "description": "The champion turns obstacles into tactical pivots and open routes.",
+        "trigger": "on_ally_or_enemy_move",
+        "effect": {
+          "type": "reposition",
+          "distance": 1,
+          "target": "ally_or_enemy"
+        }
+      }
+    },
+    "same_element_bonus": {
+      "trigger": "same_element_ally_bonus",
+      "theme": "utility_anchor",
+      "description": "Turns any improvised object into a tactical pivot for the team.",
+      "signature_gameplay": "object_repositioning",
+      "effects": [
+        {
+          "type": "ally_buff",
+          "stat": "initiative",
+          "value": 10,
+          "duration": 1,
+          "condition": "same_element_ally_nearby"
+        }
+      ]
+    },
+    "team_synergy_theme": "utility_anchor",
+    "signature_combo": "terrain_weaponization",
+    "strengths": [
+      "opening_lines",
+      "structure_breaking",
+      "initiative",
+      "map_control"
+    ],
+    "weaknesses": [
+      "low_mobility_after_charge",
+      "exposed_to_flank",
+      "weak_anti_range",
+      "needs_terrain_for_best_value"
+    ],
+    "synergies": [
+      "utility_anchor",
+      "terrain_control",
+      "frontline_pressure"
+    ],
+    "skills": [
+      {
+        "slot": 1,
+        "id": "skill_1",
+        "name": "Impact Briseur",
+        "category": "attack",
+        "type": "single_hit",
+        "cost": {
+          "pa": 2,
+          "focus": 0,
+          "energy": 0
+        },
+        "range": {
+          "min": 0,
+          "max": 2,
+          "shape": "line",
+          "target": "unit_or_tile"
+        },
+        "aoe": {
+          "shape": "single",
+          "radius": 0,
+          "width": 1,
+          "length": 2
+        },
+        "cast": {
+          "startup": 0.15,
+          "travel": 0.2,
+          "impact": 0.15,
+          "recovery": 0.1,
+          "interruptible": true
+        },
+        "animation": {
+          "pre_cast": "raise_weapon",
+          "cast": "forward_swing",
+          "impact": "impact_burst",
+          "post_cast": "recover_stance",
+          "priority": 2,
+          "sync_with_hit": true
+        },
+        "effect_tags": [
+          "burst",
+          "initiative",
+          "terrain",
+          "puncture"
+        ],
+        "status_effects": [
+          {
+            "type": "push",
+            "value": 1,
+            "duration": 0
+          }
+        ],
+        "effects": [
+          {
+            "kind": "damage",
+            "damage_type": "physical",
+            "base": 40,
+            "scaling": "dmg_phys",
+            "formula": "base + 0.8 * dmg_phys"
+          }
+        ],
+        "terrain_changes": [
+          {
+            "type": "reposition_object",
+            "target": "obstacle",
+            "distance": 1,
+            "trigger": "impact"
+          }
+        ],
+        "triggers": [],
+        "specials": [],
+        "notes": "Low-risk opener that creates angle pressure."
+      },
+      {
+        "slot": 2,
+        "id": "skill_2",
+        "name": "Ligne de terrain",
+        "category": "control",
+        "type": "line_pressure",
+        "cost": {
+          "pa": 3,
+          "focus": 0,
+          "energy": 0
+        },
+        "range": {
+          "min": 1,
+          "max": 4,
+          "shape": "line",
+          "target": "tile_area"
+        },
+        "aoe": {
+          "shape": "line",
+          "radius": 0,
+          "width": 1,
+          "length": 4
+        },
+        "cast": {
+          "startup": 0.2,
+          "travel": 0.25,
+          "impact": 0.25,
+          "recovery": 0.15,
+          "interruptible": true
+        },
+        "animation": {
+          "pre_cast": "stance_shift",
+          "cast": "sweep_line",
+          "impact": "line_break",
+          "post_cast": "reset_footing",
+          "priority": 2,
+          "sync_with_hit": false
+        },
+        "effect_tags": [
+          "lane_control",
+          "movement",
+          "terrain",
+          "pressure"
+        ],
+        "status_effects": [
+          {
+            "type": "slow",
+            "value": 25,
+            "duration": 1
+          }
+        ],
+        "effects": [
+          {
+            "kind": "damage",
+            "damage_type": "physical",
+            "base": 30,
+            "scaling": "dmg_phys"
+          }
+        ],
+        "terrain_changes": [
+          {
+            "type": "create_barricade",
+            "target": "line",
+            "duration": 2,
+            "trigger": "impact"
+          }
+        ],
+        "triggers": [],
+        "specials": [],
+        "notes": "Controls pathing and gains value from map disruption."
+      },
+      {
+        "slot": 3,
+        "id": "skill_3",
+        "name": "Zone de terrain improvisé",
+        "category": "terrain",
+        "type": "zone_field",
+        "cost": {
+          "pa": 3,
+          "focus": 0,
+          "energy": 0
+        },
+        "range": {
+          "min": 0,
+          "max": 3,
+          "shape": "burst",
+          "target": "tile_area"
+        },
+        "aoe": {
+          "shape": "burst",
+          "radius": 2,
+          "width": 0,
+          "length": 0
+        },
+        "cast": {
+          "startup": 0.2,
+          "travel": 0.0,
+          "impact": 0.25,
+          "recovery": 0.1,
+          "interruptible": false
+        },
+        "animation": {
+          "pre_cast": "grounding",
+          "cast": "slam_ground",
+          "impact": "area_ripple",
+          "post_cast": "stabilize",
+          "priority": 3,
+          "sync_with_hit": true
+        },
+        "effect_tags": [
+          "zone_control",
+          "terrain",
+          "pressure",
+          "burst"
+        ],
+        "status_effects": [
+          {
+            "type": "mark",
+            "name": "unstable_ground",
+            "duration": 2
+          }
+        ],
+        "effects": [
+          {
+            "kind": "damage",
+            "damage_type": "elemental",
+            "base": 35,
+            "scaling": "dmg_elem"
+          }
+        ],
+        "terrain_changes": [
+          {
+            "type": "change_tile_type",
+            "tile": "rough_ground",
+            "duration": 2,
+            "trigger": "impact"
+          }
+        ],
+        "triggers": [],
+        "specials": [],
+        "notes": "Creates a tactical space that enhances following attacks."
+      },
+      {
+        "slot": 4,
+        "id": "skill_4",
+        "name": "Mutation du sol",
+        "category": "terrain",
+        "type": "terrain_transform",
+        "cost": {
+          "pa": 4,
+          "focus": 0,
+          "energy": 0
+        },
+        "range": {
+          "min": 1,
+          "max": 5,
+          "shape": "line",
+          "target": "tile_area"
+        },
+        "aoe": {
+          "shape": "line",
+          "radius": 0,
+          "width": 1,
+          "length": 5
+        },
+        "cast": {
+          "startup": 0.25,
+          "travel": 0.2,
+          "impact": 0.3,
+          "recovery": 0.15,
+          "interruptible": false
+        },
+        "animation": {
+          "pre_cast": "channel_ground",
+          "cast": "crack_floor",
+          "impact": "terrain_reform",
+          "post_cast": "hold_position",
+          "priority": 4,
+          "sync_with_hit": true
+        },
+        "effect_tags": [
+          "map_control",
+          "terrain",
+          "reposition",
+          "finisher"
+        ],
+        "status_effects": [
+          {
+            "type": "exposed",
+            "value": 1,
+            "duration": 1
+          }
+        ],
+        "effects": [
+          {
+            "kind": "damage",
+            "damage_type": "physical",
+            "base": 50,
+            "scaling": "dmg_phys"
+          }
+        ],
+        "terrain_changes": [
+          {
+            "type": "raise_wall",
+            "target": "tile_line",
+            "duration": 2,
+            "trigger": "impact"
+          }
+        ],
+        "triggers": [],
+        "specials": [],
+        "notes": "Adds strong map rotation and lane disruption."
+      },
+      {
+        "slot": 5,
+        "id": "skill_5",
+        "name": "Bouclier local",
+        "category": "support",
+        "type": "buff_self",
+        "cost": {
+          "pa": 2,
+          "focus": 0,
+          "energy": 0
+        },
+        "range": {
+          "min": 0,
+          "max": 0,
+          "shape": "self",
+          "target": "self"
+        },
+        "aoe": {
+          "shape": "self",
+          "radius": 0,
+          "width": 0,
+          "length": 0
+        },
+        "cast": {
+          "startup": 0.1,
+          "travel": 0.0,
+          "impact": 0.15,
+          "recovery": 0.1,
+          "interruptible": false
+        },
+        "animation": {
+          "pre_cast": "brace",
+          "cast": "shield_rise",
+          "impact": "buff_glow",
+          "post_cast": "stance_lock",
+          "priority": 1,
+          "sync_with_hit": false
+        },
+        "effect_tags": [
+          "shield",
+          "survival",
+          "self_stability"
+        ],
+        "status_effects": [
+          {
+            "type": "shield",
+            "value": 60,
+            "duration": 2
+          }
+        ],
+        "effects": [],
+        "terrain_changes": [],
+        "triggers": [],
+        "specials": [],
+        "notes": "Survival tool and sustain play button."
+      },
+      {
+        "slot": 6,
+        "id": "skill_6",
+        "name": "Réaction terrain",
+        "category": "reaction",
+        "type": "triggered_aoe",
+        "cost": {
+          "pa": 0,
+          "focus": 0,
+          "energy": 0
+        },
+        "range": {
+          "min": 0,
+          "max": 2,
+          "shape": "burst",
+          "target": "tile_area"
+        },
+        "aoe": {
+          "shape": "burst",
+          "radius": 2,
+          "width": 0,
+          "length": 0
+        },
+        "cast": {
+          "startup": 0.05,
+          "travel": 0.1,
+          "impact": 0.2,
+          "recovery": 0.1,
+          "interruptible": true
+        },
+        "animation": {
+          "pre_cast": "ready_trigger",
+          "cast": "pulse_ground",
+          "impact": "crack_flash",
+          "post_cast": "hold",
+          "priority": 2,
+          "sync_with_hit": true
+        },
+        "effect_tags": [
+          "reaction",
+          "trigger",
+          "ground",
+          "damage"
+        ],
+        "status_effects": [
+          {
+            "type": "mark",
+            "name": "triggered_ground",
+            "duration": 2
+          }
+        ],
+        "effects": [
+          {
+            "kind": "damage",
+            "damage_type": "elemental",
+            "base": 25,
+            "scaling": "dmg_elem"
+          }
+        ],
+        "terrain_changes": [
+          {
+            "type": "create_zone",
+            "target": "burst",
+            "duration": 2,
+            "trigger": "on_step"
+          }
+        ],
+        "triggers": [
+          {
+            "condition": "on_ally_or_enemy_enter",
+            "type": "damage",
+            "value": 20
+          }
+        ],
+        "specials": [],
+        "notes": "Creates a reactive field that punishes enemy routing."
+      },
+      {
+        "slot": 7,
+        "id": "skill_7",
+        "name": "Zone d’ombre",
+        "category": "zone",
+        "type": "area_lock",
+        "cost": {
+          "pa": 4,
+          "focus": 1,
+          "energy": 0
+        },
+        "range": {
+          "min": 2,
+          "max": 4,
+          "shape": "burst",
+          "target": "tile_area"
+        },
+        "aoe": {
+          "shape": "burst",
+          "radius": 2,
+          "width": 0,
+          "length": 0
+        },
+        "cast": {
+          "startup": 0.2,
+          "travel": 0.15,
+          "impact": 0.25,
+          "recovery": 0.15,
+          "interruptible": false
+        },
+        "animation": {
+          "pre_cast": "focus_pose",
+          "cast": "seal_zone",
+          "impact": "pulse_eruption",
+          "post_cast": "hold_form",
+          "priority": 3,
+          "sync_with_hit": true
+        },
+        "effect_tags": [
+          "zone_control",
+          "lock",
+          "slow",
+          "pressure"
+        ],
+        "status_effects": [
+          {
+            "type": "root",
+            "value": 1,
+            "duration": 1
+          }
+        ],
+        "effects": [
+          {
+            "kind": "damage",
+            "damage_type": "elemental",
+            "base": 30,
+            "scaling": "dmg_elem"
+          }
+        ],
+        "terrain_changes": [
+          {
+            "type": "create_zone",
+            "target": "burst",
+            "duration": 2,
+            "trigger": "impact"
+          }
+        ],
+        "triggers": [],
+        "specials": [],
+        "notes": "Contests key tiles and denies movement lanes."
+      },
+      {
+        "slot": 8,
+        "id": "skill_8",
+        "name": "Courant de force",
+        "category": "attack",
+        "type": "wave_push",
+        "cost": {
+          "pa": 4,
+          "focus": 0,
+          "energy": 0
+        },
+        "range": {
+          "min": 2,
+          "max": 5,
+          "shape": "line",
+          "target": "unit_or_tile"
+        },
+        "aoe": {
+          "shape": "cone",
+          "radius": 2,
+          "width": 2,
+          "length": 5
+        },
+        "cast": {
+          "startup": 0.15,
+          "travel": 0.2,
+          "impact": 0.25,
+          "recovery": 0.1,
+          "interruptible": true
+        },
+        "animation": {
+          "pre_cast": "gather_energy",
+          "cast": "forward_wave",
+          "impact": "shockwave",
+          "post_cast": "recenter",
+          "priority": 3,
+          "sync_with_hit": false
+        },
+        "effect_tags": [
+          "push",
+          "burst",
+          "wave",
+          "control"
+        ],
+        "status_effects": [
+          {
+            "type": "push",
+            "value": 2,
+            "duration": 0
+          }
+        ],
+        "effects": [
+          {
+            "kind": "damage",
+            "damage_type": "elemental",
+            "base": 40,
+            "scaling": "dmg_elem"
+          }
+        ],
+        "terrain_changes": [],
+        "triggers": [],
+        "specials": [],
+        "notes": "Strong utility for lane disruption and position denial."
+      },
+      {
+        "slot": 9,
+        "id": "skill_9",
+        "name": "Pression élémentaire",
+        "category": "attack",
+        "type": "burst_combo",
+        "cost": {
+          "pa": 5,
+          "focus": 1,
+          "energy": 0
+        },
+        "range": {
+          "min": 1,
+          "max": 3,
+          "shape": "burst",
+          "target": "unit_or_tile"
+        },
+        "aoe": {
+          "shape": "burst",
+          "radius": 1,
+          "width": 0,
+          "length": 0
+        },
+        "cast": {
+          "startup": 0.2,
+          "travel": 0.15,
+          "impact": 0.3,
+          "recovery": 0.15,
+          "interruptible": false
+        },
+        "animation": {
+          "pre_cast": "charge",
+          "cast": "instant_hit",
+          "impact": "explosion",
+          "post_cast": "resume",
+          "priority": 4,
+          "sync_with_hit": true
+        },
+        "effect_tags": [
+          "combo",
+          "burst",
+          "finisher",
+          "elemental"
+        ],
+        "status_effects": [
+          {
+            "type": "exposed",
+            "value": 1,
+            "duration": 1
+          }
+        ],
+        "effects": [
+          {
+            "kind": "damage",
+            "damage_type": "elemental",
+            "base": 55,
+            "scaling": "dmg_elem"
+          }
+        ],
+        "terrain_changes": [],
+        "triggers": [],
+        "specials": [],
+        "notes": "Big damage spike when the map is already disrupted."
+      },
+      {
+        "slot": 10,
+        "id": "skill_10",
+        "name": "Finale du champ",
+        "category": "ultimate",
+        "type": "finisher",
+        "cost": {
+          "pa": 6,
+          "focus": 2,
+          "energy": 0
+        },
+        "range": {
+          "min": 1,
+          "max": 6,
+          "shape": "line",
+          "target": "tile_area"
+        },
+        "aoe": {
+          "shape": "line",
+          "radius": 1,
+          "width": 2,
+          "length": 6
+        },
+        "cast": {
+          "startup": 0.3,
+          "travel": 0.2,
+          "impact": 0.4,
+          "recovery": 0.2,
+          "interruptible": false
+        },
+        "animation": {
+          "pre_cast": "call_the_terrain",
+          "cast": "collapse_energy",
+          "impact": "world_break",
+          "post_cast": "exhausted_pose",
+          "priority": 5,
+          "sync_with_hit": true
+        },
+        "effect_tags": [
+          "ultimate",
+          "finisher",
+          "map_control",
+          "burst"
+        ],
+        "status_effects": [
+          {
+            "type": "stun",
+            "value": 1,
+            "duration": 1
+          },
+          {
+            "type": "push",
+            "value": 3,
+            "duration": 0
+          }
+        ],
+        "effects": [
+          {
+            "kind": "damage",
+            "damage_type": "mixed",
+            "base": 75,
+            "scaling": "dmg_phys + dmg_elem"
+          }
+        ],
+        "terrain_changes": [
+          {
+            "type": "collapse_tile_line",
+            "target": "line",
+            "duration": 1,
+            "trigger": "impact"
+          }
+        ],
+        "triggers": [],
+        "specials": [],
+        "notes": "High-risk, high-reward finisher when the map is already broken."
+      }
+    ],
+    "special_objects": [
+      {
+        "id": "obstacle_debris_pillar",
+        "kind": "block",
+        "subtype": "wall",
+        "visual": "stone_pillar",
+        "size": {
+          "width": 1,
+          "height": 1,
+          "depth": 1
+        },
+        "movement": "blocked",
+        "trigger_type": "on_step",
+        "trigger_behavior": {
+          "type": "damage",
+          "value": 10,
+          "duration": 1
+        },
+        "duration": 2,
+        "destruction": {
+          "on_hit": true,
+          "anim": "shatter"
+        },
+        "tags": [
+          "blocking",
+          "damage",
+          "terrain"
+        ]
+      },
+      {
+        "id": "glyph_ignition",
+        "kind": "glyph",
+        "subtype": "damage_zone",
+        "visual": "runic_circle",
+        "size": {
+          "width": 2,
+          "height": 0,
+          "depth": 2
+        },
+        "movement": "static",
+        "trigger_type": "on_ally_or_enemy_enter",
+        "trigger_behavior": {
+          "type": "damage",
+          "value": 15,
+          "damage_type": "elemental",
+          "duration": 1
+        },
+        "duration": 2,
+        "destruction": {
+          "on_timer_end": true,
+          "anim": "fade"
+        },
+        "tags": [
+          "glyph",
+          "trigger",
+          "elemental"
+        ]
+      },
+      {
+        "id": "trap_broken_floor",
+        "kind": "trap",
+        "subtype": "hazard",
+        "visual": "cracked_ground",
+        "size": {
+          "width": 1,
+          "height": 0,
+          "depth": 1
+        },
+        "movement": "static",
+        "trigger_type": "on_step",
+        "trigger_behavior": {
+          "type": "slow_and_damage",
+          "value": 25,
+          "damage": 18,
+          "duration": 1
+        },
+        "duration": 2,
+        "destruction": {
+          "on_trigger": true,
+          "anim": "collapse"
+        },
+        "tags": [
+          "trap",
+          "slow",
+          "hazard"
+        ]
+      }
+    ],
+    "animation_flow": {
+      "global_order": [
+        "pre_cast",
+        "cast",
+        "travel",
+        "impact",
+        "post_cast"
+      ],
+      "priority_rules": [
+        "higher_priority_interrupts_lower_priority",
+        "reposition_skill_can_cancel_move",
+        "terrain_skill_can_trigger_reaction_fields"
+      ],
+      "fx_layers": [
+        "body",
+        "ground",
+        "projectile",
+        "impact",
+        "status"
+      ],
+      "audio_layers": [
+        "windup",
+        "weapon_hit",
+        "ground_hit",
+        "impact_announce"
+      ]
+    },
+    "validation": {
+      "must_have": [
+        "id",
+        "name",
+        "class_id",
+        "primary_element",
+        "role_primary",
+        "base_stats",
+        "passives",
+        "same_element_bonus",
+        "skills",
+        "weaknesses",
+        "signature_combo"
+      ],
+      "min_skill_count": 10,
+      "valid_skill_categories": [
+        "attack",
+        "control",
+        "support",
+        "terrain",
+        "reaction",
+        "zone",
+        "ultim ate",
+        "movement",
+        "buff",
+        "summon"
+      ],
+      "skill_requirements": [
+        "one_opening_attack",
+        "one_control_or_zone_skill",
+        "one_self_boon_or_defense",
+        "one_terrain_or_map_skill",
+        "one_finisher_or_ultimate"
+      ],
+      "notes": "Any champion should be playable as a combatant, readable as a role, and expressive in map interaction."
+    }
+  }
+}

@@ -1,0 +1,327 @@
+{
+  "schema_version": 1,
+  "template_name": "shape_system_v1",
+  "world_model": {
+    "grid": "tile_based_3d_like",
+    "space": "2d_map_with_z_or_height_optional",
+    "coord_system": "x_y",
+    "notes": "All shapes are defined as masks over a local coordinate grid. They can be transformed by rotation, scaling, mirroring, and offset before applying to the combat map."
+  },
+  "shape_types": [
+    "point",
+    "single",
+    "line",
+    "cone",
+    "burst",
+    "circle",
+    "ring",
+    "square",
+    "diamond",
+    "cross",
+    "plus",
+    "column",
+    "wall_segment",
+    "custom_mask"
+  ],
+  "shape_definition": {
+    "type": "point",
+    "radius": 0,
+    "width": 1,
+    "length": 1,
+    "angle": 0,
+    "rotation": 0,
+    "scale": 1,
+    "mirror": false,
+    "origin": {
+      "x": 0,
+      "y": 0
+    },
+    "cells": [
+      [0, 0]
+    ],
+    "custom_mask": [
+      [0, 0],
+      [1, 0],
+      [0, 1],
+      [1, 1]
+    ],
+    "notes": "For primitive shapes, cells can be generated automatically. For custom masks, the cells are explicitly defined."
+  },
+  "primitives": {
+    "point": {
+      "cells": [[0, 0]]
+    },
+    "single": {
+      "cells": [[0, 0]]
+    },
+    "line": {
+      "cells": [
+        [0, 0],
+        [1, 0],
+        [2, 0],
+        [3, 0],
+        [4, 0]
+      ]
+    },
+    "cone": {
+      "cells": [
+        [0, 0],
+        [1, 0],
+        [2, 0],
+        [1, -1],
+        [2, -1],
+        [1, 1],
+        [2, 1]
+      ]
+    },
+    "burst": {
+      "cells": [
+        [0, 0],
+        [-1, 0], [1, 0],
+        [0, -1], [0, 1],
+        [-1, -1], [-1, 1],
+        [1, -1], [1, 1]
+      ]
+    },
+    "circle": {
+      "cells": [
+        [0, 0],
+        [1, 0], [-1, 0], [0, 1], [0, -1],
+        [1, 1], [1, -1], [-1, 1], [-1, -1],
+        [2, 0], [-2, 0], [0, 2], [0, -2]
+      ]
+    },
+    "ring": {
+      "cells": [
+        [0, 0],
+        [2, 0], [2, 1], [2, -1],
+        [-2, 0], [-2, 1], [-2, -1],
+        [0, 2], [1, 2], [-1, 2],
+        [0, -2], [1, -2], [-1, -2]
+      ]
+    },
+    "square": {
+      "cells": [
+        [0, 0], [1, 0], [-1, 0], [0, 1], [0, -1],
+        [1, 1], [1, -1], [-1, 1], [-1, -1],
+        [2, 0], [-2, 0], [0, 2], [0, -2]
+      ]
+    },
+    "diamond": {
+      "cells": [
+        [0, 0],
+        [1, 0], [-1, 0], [0, 1], [0, -1],
+        [1, 1], [-1, 1], [1, -1], [-1, -1],
+        [0, 2], [0, -2], [2, 0], [-2, 0]
+      ]
+    },
+    "cross": {
+      "cells": [
+        [0, 0], [0, 1], [0, -1], [0, 2], [0, -2],
+        [1, 0], [-1, 0], [2, 0], [-2, 0]
+      ]
+    },
+    "plus": {
+      "cells": [
+        [0, 0], [1, 0], [-1, 0], [0, 1], [0, -1]
+      ]
+    },
+    "column": {
+      "cells": [
+        [0, 0], [0, 1], [0, -1], [0, 2], [0, -2]
+      ]
+    },
+    "wall_segment": {
+      "cells": [
+        [0, 0],
+        [1, 0], [2, 0], [3, 0], [4, 0],
+        [0, 1], [1, 1], [2, 1], [3, 1], [4, 1]
+      ]
+    }
+  },
+  "shape_transformations": {
+    "rotation": {
+      "description": "Rotate the local mask around origin by N degrees.",
+      "values": [0, 45, 90, 135, 180, 225, 270, 315]
+    },
+    "mirror": {
+      "description": "Mirror along X or Y axis before applying to the map.",
+      "values": ["x", "y", "none"]
+    },
+    "scale": {
+      "description": "Increase or decrease the mask size by multiplier.",
+      "default": 1.0,
+      "range": [0.5, 3.0]
+    },
+    "offset": {
+      "description": "Translate the mask after construction.",
+      "default": {"x": 0, "y": 0}
+    }
+  },
+  "effect_meta": {
+    "trigger_types": [
+      "instant",
+      "on_step",
+      "on_enter",
+      "on_hit",
+      "on_end_turn",
+      "on_ally_uses_skill",
+      "on_enemy_turn_start",
+      "on_timer_end"
+    ],
+    "durations": [
+      "instant",
+      "one_turn",
+      "two_turns",
+      "three_turns",
+      "persistent",
+      "until_destroyed"
+    ],
+    "effect_types": [
+      "damage",
+      "heal",
+      "shield",
+      "slow",
+      "root",
+      "stun",
+      "push",
+      "pull",
+      "silence",
+      "mark",
+      "buff",
+      "debuff",
+      "summon",
+      "terrain_change",
+      "trap",
+      "glyph",
+      "wall",
+      "hazard",
+      "reposition",
+      "teleport"
+    ]
+  },
+  "object_types": {
+    "glyph": {
+      "kind": "glyph",
+      "tags": ["trigger", "zone", "static"],
+      "can_be_persistent": true,
+      "duration": "two_turns",
+      "trigger_behavior": "on_enter"
+    },
+    "trap": {
+      "kind": "trap",
+      "tags": ["trigger", "hazard", "stepped_on"],
+      "can_be_persistent": true,
+      "duration": "two_turns",
+      "trigger_behavior": "on_step"
+    },
+    "wall": {
+      "kind": "wall",
+      "tags": ["blocker", "terrain", "solid"],
+      "can_be_persistent": true,
+      "duration": "two_turns",
+      "trigger_behavior": "none"
+    },
+    "zone": {
+      "kind": "zone",
+      "tags": ["area", "dynamic"],
+      "can_be_persistent": true,
+      "duration": "one_turn",
+      "trigger_behavior": "on_enter_or_end_turn"
+    },
+    "mark": {
+      "kind": "mark",
+      "tags": ["status", "visible"],
+      "can_be_persistent": true,
+      "duration": "one_turn",
+      "trigger_behavior": "on_triggered"
+    }
+  },
+  "skill_effect_example": {
+    "name": "Glyph of Ash",
+    "shape": {
+      "type": "circle",
+      "radius": 2,
+      "rotation": 0,
+      "scale": 1,
+      "mirror": false,
+      "cells": [
+        [0, 0], [1, 0], [-1, 0], [0, 1], [0, -1],
+        [1, 1], [-1, 1], [1, -1], [-1, -1],
+        [2, 0], [-2, 0], [0, 2], [0, -2]
+      ]
+    },
+    "targeting": {
+      "mode": "tile_area",
+      "anchor": "center",
+      "requires_line_of_sight": false
+    },
+    "effect": {
+      "kind": "damage",
+      "type": "elemental",
+      "base": 25,
+      "duration": "instant",
+      "trigger": "instant"
+    },
+    "persistent_object": {
+      "kind": "glyph",
+      "duration": "two_turns",
+      "trigger": "on_enter",
+      "effect": {
+        "kind": "slow",
+        "value": 25,
+        "duration": "one_turn"
+      }
+    },
+    "visuals": {
+      "body_color": "ember",
+      "outline_color": "orange",
+      "anim": "pulse_and_ripple"
+    }
+  },
+  "custom_mask_examples": {
+    "cross_3": {
+      "cells": [
+        [0, 0], [1, 0], [-1, 0], [0, 1], [0, -1], [0, 2], [0, -2]
+      ]
+    },
+    "thorn_ring": {
+      "cells": [
+        [0, 0], [1, 0], [2, 0], [-1, 0], [-2, 0],
+        [0, 1], [0, 2], [0, -1], [0, -2],
+        [1, 1], [-1, 1], [1, -1], [-1, -1],
+        [2, 1], [-2, 1], [2, -1], [-2, -1]
+      ]
+    },
+    "arrow_head": {
+      "cells": [
+        [0, 0], [1, 0], [2, 0], [3, 0],
+        [1, -1], [2, -1], [1, 1], [2, 1],
+        [3, 1], [3, -1]
+      ]
+    },
+    "l_block": {
+      "cells": [
+        [0, 0], [1, 0], [2, 0],
+        [0, 1], [0, 2],
+        [0, -1], [0, -2]
+      ]
+    },
+    "split_trap": {
+      "cells": [
+        [0, 0], [1, 0], [-1, 0], [0, 1], [0, -1],
+        [2, 0], [-2, 0], [0, 2], [0, -2]
+      ]
+    }
+  },
+  "rules": {
+    "minimum_shape_size": 1,
+    "maximum_shape_size": 9,
+    "shape_must_be_on_grid": true,
+    "rotation_is_allowed_for_all_shapes": true,
+    "custom_masks_are_valid": true,
+    "objects_can_have_triggers": true,
+    "persistent_objects_must_define_duration": true,
+    "tile_effects_must_define_targeting_mode": true
+  }
+}
